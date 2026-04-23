@@ -12,8 +12,7 @@
 <link rel="icon" type="image/png" href="icon.png">
 <title>Grupo Doze</title>
 <style>
-*{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif !important}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif !important}
 :root{
   --bg:#ffffff;--bg2:#f5f5f4;--bg3:#fafaf9;
   --text:#1a1a1a;--text2:#6b7280;--text3:#9ca3af;
@@ -22,15 +21,13 @@
   --amber-bg:#fffbeb;--amber:#92400e;--amber-b:#fde68a;
   --red-bg:#fef2f2;--red:#991b1b;--red-b:#fecaca;
   --blue-bg:#eff6ff;--blue:#1e40af;--blue-b:#bfdbfe;
+  --purple-bg:#faf5ff;--purple:#6b21a8;--purple-b:#e9d5ff;
   --radius:10px;--radius-sm:7px;
 }
-
-}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif !important;background:var(--bg3);color:var(--text);min-height:100vh;padding-bottom:80px}
-.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:16px;position:sticky;top:0;z-index:100}
-.topbar h1{font-size:17px;font-weight:600;margin-bottom:12px}
-.tabs{display:flex;gap:4px;background:var(--bg2);border-radius:var(--radius-sm);padding:3px}
-.tab{flex:1;padding:7px 4px;font-size:13px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--text2);font-family:inherit;text-align:center;font-weight:500}
+body{background:var(--bg3);color:var(--text);min-height:100vh;padding-bottom:80px}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:100}
+.tabs{display:flex;gap:3px;background:var(--bg2);border-radius:var(--radius-sm);padding:3px;margin-top:10px}
+.tab{flex:1;padding:7px 2px;font-size:12px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--text2);text-align:center;font-weight:500}
 .tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .sync-bar{background:var(--amber-bg);border-bottom:1px solid var(--amber-b);padding:8px 16px;font-size:12px;color:var(--amber);display:none;align-items:center;gap:8px}
 .sync-bar.show{display:flex}
@@ -46,28 +43,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 .section{background:var(--bg);border-radius:var(--radius);border:1px solid var(--border);padding:14px;margin-bottom:12px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .section-title{font-size:15px;font-weight:600}
-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;color:var(--text);font-family:inherit;font-weight:500;transition:opacity .15s}
+button{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;color:var(--text);font-weight:500;transition:opacity .15s}
 button:active{opacity:.7}
 button.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
 button.green{background:var(--green-bg);color:var(--green);border-color:var(--green-b);font-size:13px;padding:7px 12px}
 button.danger-btn{color:var(--red);border-color:var(--red-b);font-size:13px;padding:7px 12px}
+button.purple-btn{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-b);font-size:13px;padding:7px 12px}
 button:disabled{opacity:.4;cursor:not-allowed}
 .search-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-input[type=text],input[type=number],select{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:inherit;outline:none;-webkit-appearance:none}
+input[type=text],input[type=number],select{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none}
 input[type=text]:focus,input[type=number]:focus,select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
-.filter-sel{flex:1;min-width:120px;font-size:13px;padding:8px 10px}
-.search-inp{flex:2;min-width:140px}
+.filter-sel{flex:1;min-width:100px;font-size:13px;padding:8px 10px}
+.search-inp{flex:2;min-width:130px}
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;color:var(--text2);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--border);white-space:nowrap}
 th.sort{cursor:pointer}
-td{padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
 .badge.ok{background:var(--green-bg);color:var(--green)}
 .badge.low{background:var(--amber-bg);color:var(--amber)}
 .badge.out{background:var(--red-bg);color:var(--red)}
 .badge.dest{background:var(--blue-bg);color:var(--blue)}
+.badge.cat{background:var(--purple-bg);color:var(--purple)}
 .row-acts{display:flex;gap:6px}
 .row-acts button{padding:5px 10px;font-size:12px}
 .empty{text-align:center;padding:24px;color:var(--text2);font-size:14px}
@@ -79,7 +78,7 @@ tr:last-child td{border-bottom:none}
 .modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
 .modal h2{font-size:17px;font-weight:700;margin-bottom:16px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
-.hist-day-hd{display:flex;align-items:center;gap:8px;padding:10px 0 6px;border-bottom:1px solid var(--border2);margin-top:4px}
+.hist-day-hd{display:flex;align-items:center;gap:8px;padding:10px 0 6px;border-bottom:1px solid var(--border2);margin-top:4px;flex-wrap:wrap}
 .hist-day-lbl{font-size:13px;font-weight:600;color:var(--text2)}
 .hist-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--border)}
 .hist-row:last-child{border-bottom:none}
@@ -95,12 +94,20 @@ tr:last-child td{border-bottom:none}
 .msg.ok{color:var(--green)}
 .msg.err{color:var(--red)}
 .dest-wrap{display:none}
-.prod-name{font-size:14px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prod-name{font-size:14px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .load-screen{position:fixed;inset:0;background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:500}
 .load-screen.hidden{display:none}
-.load-logo{font-size:32px;font-weight:700;color:var(--text)}
-.load-sub{font-size:14px;color:var(--text2)}
 .load-spin{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
+.load-sub{font-size:14px;color:var(--text2)}
+.cat-list{display:flex;flex-direction:column;gap:8px}
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg2)}
+.cat-name{font-size:14px;font-weight:500}
+.cat-count{font-size:12px;color:var(--text2)}
+.construccion{text-align:center;padding:40px 20px}
+.construccion-icon{font-size:48px;margin-bottom:16px}
+.construccion h2{font-size:20px;font-weight:700;margin-bottom:8px}
+.construccion p{font-size:14px;color:var(--text2);line-height:1.6}
+.construccion .pronto{display:inline-block;margin-top:16px;padding:8px 20px;background:var(--text);color:var(--bg);border-radius:20px;font-size:13px;font-weight:600}
 </style>
 </head>
 <body>
@@ -117,6 +124,8 @@ tr:last-child td{border-bottom:none}
     <button class="tab active" onclick="showPage('productos',this)">Productos</button>
     <button class="tab" onclick="showPage('movimientos',this)">Movimientos</button>
     <button class="tab" onclick="showPage('historial',this)">Historial</button>
+    <button class="tab" onclick="showPage('categorias',this)">Categorías</button>
+    <button class="tab" onclick="showPage('mantenimiento',this)">Obras 🚧</button>
   </div>
 </div>
 
@@ -127,23 +136,29 @@ tr:last-child td{border-bottom:none}
 
 <div class="metrics">
   <div class="metric"><div class="metric-label">Referencias</div><div class="metric-value" id="m-total">—</div></div>
-  <div class="metric"><div class="metric-label">Cajas stock</div><div class="metric-value" id="m-units">—</div></div>
+  <div class="metric"><div class="metric-label">En stock</div><div class="metric-value" id="m-units">—</div></div>
   <div class="metric"><div class="metric-label">Alertas</div><div class="metric-value warn" id="m-low">—</div></div>
 </div>
 
+<!-- PRODUCTOS -->
 <div class="page active" id="page-productos">
   <div class="section">
     <div class="section-header">
       <span class="section-title">Inventario</span>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="green" onclick="exportStockCSV()">Exportar .csv</button>
-        <button class="primary" onclick="openModal('add')">+ Añadir</button>
+        <button class="primary" onclick="openModal('addprod')">+ Añadir</button>
       </div>
     </div>
     <div class="search-row">
-      <input class="search-inp" type="text" placeholder="Buscar..." oninput="renderProductos()" id="search-prod">
+      <input class="search-inp" type="text" placeholder="Buscar producto..." oninput="renderProductos()" id="search-prod">
+      <select class="filter-sel" onchange="renderProductos()" id="filter-cat">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+    <div class="search-row">
       <select class="filter-sel" onchange="renderProductos()" id="filter-estado">
-        <option value="">Todos</option>
+        <option value="">Todos los estados</option>
         <option value="ok">OK</option>
         <option value="low">Stock bajo</option>
         <option value="out">Sin stock</option>
@@ -153,7 +168,7 @@ tr:last-child td{border-bottom:none}
       <table>
         <thead><tr>
           <th class="sort" onclick="toggleSort('nombre')">Producto <span id="arr-nombre">↑</span></th>
-          <th>Cajas</th>
+          <th>Uds</th>
           <th class="sort" onclick="toggleSort('estado')">Estado <span id="arr-estado">↕</span></th>
           <th></th>
         </tr></thead>
@@ -163,9 +178,13 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- MOVIMIENTOS -->
 <div class="page" id="page-movimientos">
   <div class="section">
     <div class="section-header"><span class="section-title">Registrar movimiento</span></div>
+    <div class="field"><label>Categoría</label>
+      <select id="mov-cat" onchange="renderMovProdSelect()"></select>
+    </div>
     <div class="field"><label>Producto</label><select id="mov-prod"></select></div>
     <div class="field"><label>Tipo</label>
       <select id="mov-tipo" onchange="toggleDest(this.value)">
@@ -180,6 +199,7 @@ tr:last-child td{border-bottom:none}
           <option value="Mesón">Mesón</option>
           <option value="Campo de Tiro">Campo de Tiro</option>
           <option value="Revolutum">Revolutum</option>
+          <option value="Corte y Cata">Corte y Cata</option>
           <option value="otro">Otro...</option>
         </select>
       </div>
@@ -188,13 +208,14 @@ tr:last-child td{border-bottom:none}
         <input type="text" id="mov-dest-otro" placeholder="Nombre del destino">
       </div>
     </div>
-    <div class="field"><label>Cajas</label><input type="number" id="mov-cant" min="1" value="1"></div>
+    <div class="field"><label>Cantidad</label><input type="number" id="mov-cant" min="1" value="1"></div>
     <div class="field"><label>Nota (opcional)</label><input type="text" id="mov-nota" placeholder="Observaciones..."></div>
     <button class="primary" id="btn-guardar" style="width:100%;justify-content:center" onclick="registrarMovimiento()">Guardar movimiento</button>
     <div class="msg" id="mov-msg"></div>
   </div>
 </div>
 
+<!-- HISTORIAL -->
 <div class="page" id="page-historial">
   <div class="section">
     <div class="section-header">
@@ -206,16 +227,38 @@ tr:last-child td{border-bottom:none}
       <button class="green" onclick="exportHistCSV('')">Todo</button>
       <button class="green" onclick="exportHistCSV('Doze')">Doze</button>
       <button class="green" onclick="exportHistCSV('Mesón')">Mesón</button>
-      <button class="green" onclick="exportHistCSV('Campo de Tiro')">Campo Tiro</button>
+      <button class="green" onclick="exportHistCSV('Campo de Tiro')">C.Tiro</button>
       <button class="green" onclick="exportHistCSV('Revolutum')">Revolutum</button>
+      <button class="green" onclick="exportHistCSV('Corte y Cata')">C.Cata</button>
     </div>
     <div class="search-row">
-      <select class="filter-sel" onchange="renderHistorial()" id="filter-dest">
+      <select class="filter-sel" onchange="renderHistorial()" id="filter-hdest">
         <option value="">Todos los destinos</option>
         <option value="Doze">Doze</option>
         <option value="Mesón">Mesón</option>
         <option value="Campo de Tiro">Campo de Tiro</option>
         <option value="Revolutum">Revolutum</option>
+        <option value="Corte y Cata">Corte y Cata</option>
+      </select>
+      <select class="filter-sel" onchange="renderHistorial()" id="filter-hcat">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+    <div class="search-row">
+      <select class="filter-sel" onchange="renderHistorial()" id="filter-hmes">
+        <option value="">Todos los meses</option>
+        <option value="01">Enero</option>
+        <option value="02">Febrero</option>
+        <option value="03">Marzo</option>
+        <option value="04">Abril</option>
+        <option value="05">Mayo</option>
+        <option value="06">Junio</option>
+        <option value="07">Julio</option>
+        <option value="08">Agosto</option>
+        <option value="09">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
       </select>
       <select class="filter-sel" onchange="renderHistorial()" id="filter-htipo">
         <option value="">Entradas y salidas</option>
@@ -227,17 +270,36 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- CATEGORIAS -->
+<div class="page" id="page-categorias">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Categorías</span>
+      <button class="primary" onclick="openModal('addcat')">+ Nueva</button>
+    </div>
+    <div class="cat-list" id="cat-list"></div>
+  </div>
+</div>
+
+<!-- MANTENIMIENTO -->
+<div class="page" id="page-mantenimiento">
+  <div class="section">
+    <div class="construccion">
+      <div class="construccion-icon">🚧</div>
+      <h2>En construcción</h2>
+      <p>El módulo de partes de mantenimiento y pedidos está en desarrollo.<br><br>Pronto podrás gestionar todas las incidencias y solicitudes de los locales desde aquí.</p>
+      <span class="pronto">Próximamente</span>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <div class="modal-handle"></div>
     <h2 id="modal-title">Añadir producto</h2>
-    <div class="field"><label>Nombre</label><input type="text" id="f-nombre" placeholder="Ej: Melior"></div>
-    <div class="field"><label>Stock inicial (cajas)</label><input type="number" id="f-stock" min="0" value="0"></div>
-    <div class="field"><label>Alerta de stock bajo (cajas)</label><input type="number" id="f-min" min="0" value="3"></div>
-    <div class="modal-actions">
-      <button onclick="closeModal()">Cancelar</button>
-      <button class="primary" onclick="guardarProducto()">Guardar</button>
-    </div>
+    <div id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
   </div>
 </div>
 
@@ -245,103 +307,10 @@ tr:last-child td{border-bottom:none}
 const SUPABASE_URL='https://mkqthvfygmuypycwdaza.supabase.co';
 const SUPABASE_KEY='sb_publishable_xMFVUHJRWOWyA4MgnOnmRQ_IK6lQIFW';
 
-const INITIAL_PRODUCTOS=[
-  {id:'p0',nombre:'Ademán Carabizal',stock:9,min:3},
-  {id:'p1',nombre:'Ademán Valdecarretas',stock:0,min:2},
-  {id:'p2',nombre:'Ademán Valdearanda',stock:0,min:2},
-  {id:'p3',nombre:'Azpilicueta',stock:6,min:3},
-  {id:'p4',nombre:'Matarromera (normal)',stock:12,min:3},
-  {id:'p5',nombre:'Matarromera CM',stock:6,min:2},
-  {id:'p6',nombre:'Matarromera Magnum',stock:5,min:2},
-  {id:'p7',nombre:'Matarromera pequeña',stock:2,min:2},
-  {id:'p8',nombre:'Melior',stock:25,min:5},
-  {id:'p9',nombre:'Muga',stock:2,min:2},
-  {id:'p10',nombre:'Oinoz',stock:14,min:3},
-  {id:'p11',nombre:'Pago de Carraovejas',stock:2,min:2},
-  {id:'p12',nombre:'Pago de los Capellanes',stock:0,min:2},
-  {id:'p13',nombre:'Revolutum Blanco',stock:0,min:2},
-  {id:'p14',nombre:'Revolutum Tinto',stock:0,min:2},
-  {id:'p15',nombre:'Ruavieja Aguardiente Orujo',stock:2,min:2},
-  {id:'p16',nombre:'Ruavieja Crema',stock:3,min:2},
-  {id:'p17',nombre:'Ruavieja Hierbas',stock:19,min:4},
-  {id:'p18',nombre:'Ruavieja Pacharán',stock:4,min:2},
-  {id:'p19',nombre:'Valdelosfrailes',stock:3,min:2},
-  {id:'p20',nombre:'Viña Caeira',stock:7,min:3},
-  {id:'p21',nombre:'Yllera',stock:1,min:2}
-];
-
-const INITIAL_HIST=[
-  {id:'h001',prod:'Matarromera (normal)',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'19/11/2024'},
-  {id:'h002',prod:'Ademán Carabizal',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'19/11/2024'},
-  {id:'h003',prod:'Ademán Carabizal',tipo:'salida',cant:1,destino:'Mesón',nota:'Crianza',fecha:'19/11/2024'},
-  {id:'h004',prod:'Ademán Valdecarretas',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'19/11/2024'},
-  {id:'h005',prod:'Ademán Carabizal',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'27/11/2024'},
-  {id:'h006',prod:'Ademán Valdearanda',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'27/11/2024'},
-  {id:'h007',prod:'Ademán Valdecarretas',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'27/11/2024'},
-  {id:'h008',prod:'Matarromera (normal)',tipo:'salida',cant:4,destino:'Doze',nota:'Crianza',fecha:'03/12/2024'},
-  {id:'h009',prod:'Ruavieja Crema',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'03/12/2024'},
-  {id:'h010',prod:'Viña Caeira',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'03/12/2024'},
-  {id:'h011',prod:'Matarromera CM',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'03/12/2024'},
-  {id:'h012',prod:'Matarromera (normal)',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'09/12/2024'},
-  {id:'h013',prod:'Matarromera Magnum',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'09/12/2024'},
-  {id:'h014',prod:'Melior',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'09/12/2024'},
-  {id:'h015',prod:'Oinoz',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'09/12/2024'},
-  {id:'h016',prod:'Azpilicueta',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'09/12/2024'},
-  {id:'h017',prod:'Matarromera (normal)',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'15/12/2024'},
-  {id:'h018',prod:'Azpilicueta',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'15/12/2024'},
-  {id:'h019',prod:'Melior',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'15/12/2024'},
-  {id:'h020',prod:'Viña Caeira',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'15/12/2024'},
-  {id:'h021',prod:'Melior',tipo:'salida',cant:6,destino:'Mesón',nota:'',fecha:'18/12/2024'},
-  {id:'h022',prod:'Oinoz',tipo:'salida',cant:6,destino:'Mesón',nota:'',fecha:'18/12/2024'},
-  {id:'h023',prod:'Matarromera Magnum',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'19/12/2024'},
-  {id:'h024',prod:'Matarromera (normal)',tipo:'salida',cant:1,destino:'Doze',nota:'Crianza',fecha:'19/12/2024'},
-  {id:'h025',prod:'Melior',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'19/12/2024'},
-  {id:'h026',prod:'Melior',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'22/12/2024'},
-  {id:'h027',prod:'Matarromera (normal)',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h028',prod:'Matarromera Magnum',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h029',prod:'Melior',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h030',prod:'Ruavieja Hierbas',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h030b',prod:'Ruavieja Crema',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h030c',prod:'Ruavieja Pacharán',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h031',prod:'Oinoz',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'29/12/2024'},
-  {id:'h032',prod:'Melior',tipo:'salida',cant:8,destino:'Mesón',nota:'',fecha:'30/12/2024'},
-  {id:'h033',prod:'Yllera',tipo:'salida',cant:5,destino:'Mesón',nota:'',fecha:'30/12/2024'},
-  {id:'h034',prod:'Melior',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'02/02/2025'},
-  {id:'h035',prod:'Ademán Valdearanda',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'02/02/2025'},
-  {id:'h036',prod:'Ruavieja Crema',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'02/02/2025'},
-  {id:'h037',prod:'Melior',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'15/02/2025'},
-  {id:'h038',prod:'Matarromera (normal)',tipo:'salida',cant:2,destino:'Doze',nota:'Crianza',fecha:'15/02/2025'},
-  {id:'h039',prod:'Matarromera CM',tipo:'salida',cant:2,destino:'Doze',nota:'Fernando — 4 cajas Revolutum',fecha:'16/02/2025'},
-  {id:'h040',prod:'Azpilicueta',tipo:'salida',cant:1,destino:'Doze',nota:'Fernando',fecha:'16/02/2025'},
-  {id:'h041',prod:'Melior',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'25/02/2025'},
-  {id:'h042',prod:'Matarromera (normal)',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'25/02/2025'},
-  {id:'h043',prod:'Viña Caeira',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'25/02/2025'},
-  {id:'h044',prod:'Ruavieja Crema',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'25/02/2025'},
-  {id:'h045',prod:'Ruavieja Crema',tipo:'salida',cant:2,destino:'Mesón',nota:'',fecha:'26/02/2025'},
-  {id:'h046',prod:'Ruavieja Hierbas',tipo:'salida',cant:3,destino:'Mesón',nota:'',fecha:'26/02/2025'},
-  {id:'h047',prod:'Ruavieja Pacharán',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'26/02/2025'},
-  {id:'h048',prod:'Matarromera (normal)',tipo:'salida',cant:3,destino:'Mesón',nota:'Crianza',fecha:'26/02/2025'},
-  {id:'h049',prod:'Azpilicueta',tipo:'salida',cant:1,destino:'Mesón',nota:'',fecha:'26/02/2025'},
-  {id:'h050',prod:'Matarromera (normal)',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'09/03/2025'},
-  {id:'h051',prod:'Melior',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'09/03/2025'},
-  {id:'h052',prod:'Viña Caeira',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'09/03/2025'},
-  {id:'h053',prod:'Ademán Valdecarretas',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'09/03/2025'},
-  {id:'h054',prod:'Matarromera CM',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h055',prod:'Matarromera (normal)',tipo:'salida',cant:2,destino:'Doze',nota:'Crianza',fecha:'18/03/2025'},
-  {id:'h056',prod:'Melior',tipo:'salida',cant:4,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h057',prod:'Yllera',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h058',prod:'Oinoz',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h059',prod:'Pago de los Capellanes',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h060',prod:'Pago de Carraovejas',tipo:'salida',cant:1,destino:'Doze',nota:'',fecha:'18/03/2025'},
-  {id:'h061',prod:'Melior',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'26/03/2025'},
-  {id:'h062',prod:'Matarromera (normal)',tipo:'salida',cant:2,destino:'Doze',nota:'',fecha:'26/03/2025'},
-  {id:'h063',prod:'Viña Caeira',tipo:'salida',cant:3,destino:'Doze',nota:'',fecha:'26/03/2025'}
-];
-
-let productos=[],historial=[],editId=null,sortKey='nombre',sortDir=1;
+let productos=[],historial=[],categorias=[],editId=null,sortKey='nombre',sortDir=1,modalMode='';
 
 async function api(path,method='GET',body){
-  const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}};
+  const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'}};
   if(body) opts.body=JSON.stringify(body);
   const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,opts);
   if(!r.ok){const e=await r.text();throw new Error(e);}
@@ -349,37 +318,72 @@ async function api(path,method='GET',body){
   return true;
 }
 
-function showSync(msg){
-  document.getElementById('sync-bar').classList.add('show');
-  document.getElementById('sync-msg').textContent=msg||'Guardando...';
-}
-function hideSync(){document.getElementById('sync-bar').classList.remove('show')}
+function showSync(msg){document.getElementById('sync-bar').classList.add('show');document.getElementById('sync-msg').textContent=msg||'Guardando...';}
+function hideSync(){document.getElementById('sync-bar').classList.remove('show');}
 
 async function cargarDatos(){
   try{
-    const [prods,hist]=await Promise.all([
+    let [prods,hist,cats]=await Promise.all([
       api('productos?order=nombre.asc&select=*'),
-      api('historial?order=created_at.desc&select=*')
+      api('historial?order=created_at.desc&select=*'),
+      api('categorias?order=nombre.asc&select=*').catch(()=>[])
     ]);
-    if(prods.length===0){
-      showSync('Cargando datos iniciales...');
-      await api('productos','POST',INITIAL_PRODUCTOS);
-      await api('historial','POST',INITIAL_HIST);
-      hideSync();
-      productos=[...INITIAL_PRODUCTOS];
-      historial=[...INITIAL_HIST].reverse();
-    } else {
-      productos=prods;
-      historial=hist;
+
+    // Si no existe tabla categorias la creamos via datos iniciales
+    if(!Array.isArray(cats)||cats.length===0){
+      // Intentar crear categoria por defecto
+      try{
+        await api('categorias','POST',[{id:'cat0',nombre:'Licores y vinos'}]);
+        cats=[{id:'cat0',nombre:'Licores y vinos'}];
+        // Asignar categoria a productos existentes
+        if(prods.length>0){
+          for(const p of prods){
+            await api('productos?id=eq.'+p.id,'PATCH',{categoria:'cat0'});
+          }
+          prods=prods.map(p=>({...p,categoria:'cat0'}));
+        }
+      }catch(e){cats=[{id:'cat0',nombre:'Licores y vinos'}];}
     }
+
+    categorias=cats;
+    productos=prods;
+    historial=hist;
+
     document.getElementById('load-screen').classList.add('hidden');
+    poblarFiltrosCat();
     renderProductos();
+    renderCategorias();
   }catch(e){
-    document.getElementById('load-screen').innerHTML='<div class="load-logo">Error</div><div class="load-sub">No se pudo conectar con la base de datos.<br>Comprueba tu conexión.</div>';
+    document.getElementById('load-screen').innerHTML='<div style="font-size:20px;font-weight:700">Error</div><div style="font-size:14px;color:#6b7280;margin-top:8px">No se pudo conectar.<br>Comprueba tu conexión.</div>';
   }
 }
 
-function estadoVal(p){return p.stock===0?0:p.stock<=p.min?1:2}
+function poblarFiltrosCat(){
+  const opts=categorias.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
+  const all='<option value="">Todas las categorías</option>';
+  document.getElementById('filter-cat').innerHTML=all+opts;
+  document.getElementById('filter-hcat').innerHTML=all+opts;
+  // select de movimientos
+  const movCat=document.getElementById('mov-cat');
+  if(movCat) movCat.innerHTML='<option value="">— Todas —</option>'+opts;
+}
+
+function nomCat(id){
+  const c=categorias.find(x=>x.id===id);
+  return c?c.nombre:'';
+}
+
+function showPage(p,btn){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  btn.classList.add('active');
+  if(p==='movimientos'){poblarFiltrosCat();renderMovCatSelect();}
+  if(p==='historial') renderHistorial();
+  if(p==='categorias') renderCategorias();
+}
+
+function estadoVal(p){return p.stock===0?0:p.stock<=p.min?1:2;}
 function badge(s,m){
   if(s===0) return '<span class="badge out">Sin stock</span>';
   if(s<=m) return '<span class="badge low">Stock bajo</span>';
@@ -387,7 +391,7 @@ function badge(s,m){
 }
 
 function toggleSort(k){
-  if(sortKey===k){sortDir*=-1}else{sortKey=k;sortDir=1}
+  if(sortKey===k){sortDir*=-1;}else{sortKey=k;sortDir=1;}
   ['nombre','estado'].forEach(key=>{
     const el=document.getElementById('arr-'+key);
     if(!el) return;
@@ -400,20 +404,25 @@ function toggleSort(k){
 function renderProductos(){
   const q=(document.getElementById('search-prod').value||'').toLowerCase();
   const ef=document.getElementById('filter-estado').value;
+  const ec=document.getElementById('filter-cat').value;
   let lista=[...productos];
   if(q) lista=lista.filter(p=>p.nombre.toLowerCase().includes(q));
   if(ef==='ok') lista=lista.filter(p=>p.stock>p.min);
   else if(ef==='low') lista=lista.filter(p=>p.stock>0&&p.stock<=p.min);
   else if(ef==='out') lista=lista.filter(p=>p.stock===0);
+  if(ec) lista=lista.filter(p=>p.categoria===ec);
   lista.sort((a,b)=>sortKey==='nombre'?sortDir*a.nombre.localeCompare(b.nombre,'es'):sortDir*(estadoVal(a)-estadoVal(b)));
   const tb=document.getElementById('tbody-productos');
   if(!lista.length){tb.innerHTML='<tr><td colspan="4" class="empty">Sin resultados</td></tr>';updateMetrics();return;}
   tb.innerHTML=lista.map(p=>`<tr>
-    <td><div class="prod-name" title="${p.nombre}">${p.nombre}</div></td>
+    <td>
+      <div class="prod-name" title="${p.nombre}">${p.nombre}</div>
+      ${p.categoria?`<span class="badge cat" style="margin-top:3px;display:inline-block">${nomCat(p.categoria)}</span>`:''}
+    </td>
     <td style="font-weight:700">${p.stock}</td>
     <td>${badge(p.stock,p.min)}</td>
     <td><div class="row-acts">
-      <button onclick="openModal('edit','${p.id}')">Editar</button>
+      <button onclick="openModal('editprod','${p.id}')">Editar</button>
       <button class="danger-btn" onclick="eliminar('${p.id}')">Borrar</button>
     </div></td>
   </tr>`).join('');
@@ -426,50 +435,81 @@ function updateMetrics(){
   document.getElementById('m-low').textContent=productos.filter(p=>p.stock===0||p.stock<=p.min).length;
 }
 
-function showPage(p,btn){
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  btn.classList.add('active');
-  if(p==='movimientos') renderMovSelect();
-  if(p==='historial') renderHistorial();
+function openModal(mode,id){
+  modalMode=mode;
+  editId=id||null;
+  const overlay=document.getElementById('modal-overlay');
+  const title=document.getElementById('modal-title');
+  const body=document.getElementById('modal-body');
+  const actions=document.getElementById('modal-actions');
+
+  if(mode==='addprod'||mode==='editprod'){
+    title.textContent=mode==='editprod'?'Editar producto':'Añadir producto';
+    const p=mode==='editprod'?productos.find(x=>x.id===id):null;
+    const catOpts=categorias.map(c=>`<option value="${c.id}" ${p&&p.categoria===c.id?'selected':''}>${c.nombre}</option>`).join('');
+    const unidad=p?(p.unidad||'cajas'):'unidades';
+    body.innerHTML=`
+      <div class="field"><label>Nombre</label><input type="text" id="f-nombre" value="${p?p.nombre:''}"></div>
+      <div class="field"><label>Categoría</label><select id="f-cat"><option value="">Sin categoría</option>${catOpts}</select></div>
+      <div class="field"><label>Unidad</label><select id="f-unidad">
+        <option value="cajas" ${unidad==='cajas'?'selected':''}>Cajas</option>
+        <option value="unidades" ${unidad==='unidades'?'selected':''}>Unidades</option>
+        <option value="metros" ${unidad==='metros'?'selected':''}>Metros</option>
+        <option value="packs" ${unidad==='packs'?'selected':''}>Packs</option>
+      </select></div>
+      <div class="field"><label>Stock actual</label><input type="number" id="f-stock" min="0" value="${p?p.stock:0}"></div>
+      <div class="field"><label>Alerta de stock bajo</label><input type="number" id="f-min" min="0" value="${p?p.min:3}"></div>
+    `;
+    actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarProducto()">Guardar</button>';
+  } else if(mode==='addcat'||mode==='editcat'){
+    title.textContent=mode==='editcat'?'Editar categoría':'Nueva categoría';
+    const c=mode==='editcat'?categorias.find(x=>x.id===id):null;
+    body.innerHTML=`<div class="field"><label>Nombre</label><input type="text" id="f-catnom" value="${c?c.nombre:''}"></div>`;
+    actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarCategoria()">Guardar</button>';
+  }
+  overlay.classList.add('open');
 }
 
-function openModal(mode,id){
-  editId=id||null;
-  document.getElementById('modal-title').textContent=mode==='edit'?'Editar producto':'Añadir producto';
-  if(mode==='edit'){
-    const p=productos.find(x=>x.id===id);
-    document.getElementById('f-nombre').value=p.nombre;
-    document.getElementById('f-stock').value=p.stock;
-    document.getElementById('f-min').value=p.min;
-  }else{
-    document.getElementById('f-nombre').value='';
-    document.getElementById('f-stock').value='0';
-    document.getElementById('f-min').value='3';
-  }
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
 
 async function guardarProducto(){
   const nombre=document.getElementById('f-nombre').value.trim();
   if(!nombre) return;
   const stock=parseInt(document.getElementById('f-stock').value)||0;
   const min=parseInt(document.getElementById('f-min').value)||3;
+  const categoria=document.getElementById('f-cat').value||null;
+  const unidad=document.getElementById('f-unidad').value||'unidades';
   showSync('Guardando producto...');
   try{
     if(editId){
-      await api(`productos?id=eq.${editId}`,'PATCH',{nombre,stock,min});
+      await api(`productos?id=eq.${editId}`,'PATCH',{nombre,stock,min,categoria,unidad});
       const p=productos.find(x=>x.id===editId);
-      p.nombre=nombre;p.stock=stock;p.min=min;
+      Object.assign(p,{nombre,stock,min,categoria,unidad});
     }else{
       const id='p'+Date.now();
-      await api('productos','POST',[{id,nombre,stock,min}]);
-      productos.push({id,nombre,stock,min});
+      await api('productos','POST',[{id,nombre,stock,min,categoria,unidad}]);
+      productos.push({id,nombre,stock,min,categoria,unidad});
     }
-    hideSync();closeModal();renderProductos();
+    hideSync();closeModal();renderProductos();poblarFiltrosCat();
   }catch(e){hideSync();alert('Error al guardar: '+e.message);}
+}
+
+async function guardarCategoria(){
+  const nombre=document.getElementById('f-catnom').value.trim();
+  if(!nombre) return;
+  showSync('Guardando categoría...');
+  try{
+    if(editId){
+      await api(`categorias?id=eq.${editId}`,'PATCH',{nombre});
+      const c=categorias.find(x=>x.id===editId);
+      c.nombre=nombre;
+    }else{
+      const id='cat'+Date.now();
+      await api('categorias','POST',[{id,nombre}]);
+      categorias.push({id,nombre});
+    }
+    hideSync();closeModal();renderCategorias();poblarFiltrosCat();
+  }catch(e){hideSync();alert('Error: '+e.message);}
 }
 
 async function eliminar(id){
@@ -482,18 +522,62 @@ async function eliminar(id){
   }catch(e){hideSync();alert('Error: '+e.message);}
 }
 
+async function eliminarCat(id){
+  const enUso=productos.some(p=>p.categoria===id);
+  if(enUso){alert('No puedes eliminar una categoría con productos asignados.');return;}
+  if(!confirm('¿Eliminar esta categoría?')) return;
+  showSync('Eliminando...');
+  try{
+    await api(`categorias?id=eq.${id}`,'DELETE');
+    categorias=categorias.filter(c=>c.id!==id);
+    hideSync();renderCategorias();poblarFiltrosCat();
+  }catch(e){hideSync();alert('Error: '+e.message);}
+}
+
+function renderCategorias(){
+  const el=document.getElementById('cat-list');
+  if(!categorias.length){el.innerHTML='<div class="empty">Sin categorías todavía</div>';return;}
+  el.innerHTML=categorias.map(c=>{
+    const count=productos.filter(p=>p.categoria===c.id).length;
+    return `<div class="cat-item">
+      <div>
+        <div class="cat-name">${c.nombre}</div>
+        <div class="cat-count">${count} producto${count!==1?'s':''}</div>
+      </div>
+      <div class="row-acts">
+        <button onclick="openModal('editcat','${c.id}')">Editar</button>
+        <button class="danger-btn" onclick="eliminarCat('${c.id}')">Borrar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMovCatSelect(){
+  const sel=document.getElementById('mov-cat');
+  sel.innerHTML='<option value="">— Todas —</option>'+categorias.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
+  renderMovProdSelect();
+}
+
+function renderMovProdSelect(){
+  const catId=document.getElementById('mov-cat').value;
+  let lista=[...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  if(catId) lista=lista.filter(p=>p.categoria===catId);
+  const unidadNom=p=>{
+    const prod=productos.find(x=>x.id===p.id);
+    return prod&&prod.unidad?prod.unidad:'uds';
+  };
+  document.getElementById('mov-prod').innerHTML=lista.length
+    ?lista.map(p=>`<option value="${p.id}">${p.nombre} (${p.stock} ${unidadNom(p)})</option>`).join('')
+    :'<option>— Sin productos —</option>';
+  toggleDest(document.getElementById('mov-tipo').value);
+}
+
 function toggleDest(val){
   document.getElementById('dest-wrap').style.display=val==='salida'?'block':'none';
   if(val!=='salida') document.getElementById('dest-otro-wrap').style.display='none';
 }
 function toggleOtro(val){
   document.getElementById('dest-otro-wrap').style.display=val==='otro'?'block':'none';
-}
-
-function renderMovSelect(){
-  document.getElementById('mov-prod').innerHTML=[...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'))
-    .map(p=>`<option value="${p.id}">${p.nombre} (${p.stock})</option>`).join('');
-  toggleDest(document.getElementById('mov-tipo').value);
 }
 
 async function registrarMovimiento(){
@@ -514,31 +598,39 @@ async function registrarMovimiento(){
   const nuevoStock=p.stock+(tipo==='entrada'?cant:-cant);
   const hid='h'+Date.now();
   const fecha=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const catId=p.categoria||'';
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;
   showSync('Guardando movimiento...');
   try{
     await api(`productos?id=eq.${id}`,'PATCH',{stock:nuevoStock});
-    await api('historial','POST',[{id:hid,prod:p.nombre,tipo,cant,destino,nota,fecha}]);
+    await api('historial','POST',[{id:hid,prod:p.nombre,tipo,cant,destino,nota,fecha,categoria:catId}]);
     p.stock=nuevoStock;
-    historial.unshift({id:hid,prod:p.nombre,tipo,cant,destino,nota,fecha});
+    historial.unshift({id:hid,prod:p.nombre,tipo,cant,destino,nota,fecha,categoria:catId});
     hideSync();
-    renderMovSelect();
+    renderMovProdSelect();
     msgEl.className='msg ok';
-    msgEl.textContent=tipo==='entrada'?`${cant} cajas añadidas. Stock: ${p.stock}`:`${cant} cajas → ${destino}. Stock: ${p.stock}`;
+    msgEl.textContent=tipo==='entrada'?`${cant} añadidos. Stock: ${p.stock}`:`${cant} → ${destino}. Stock: ${p.stock}`;
     document.getElementById('mov-cant').value='1';
     document.getElementById('mov-nota').value='';
-    setTimeout(()=>{msgEl.textContent='';msgEl.className='msg'},3500);
-  }catch(e){hideSync();msgEl.className='msg err';msgEl.textContent='Error al guardar. Comprueba tu conexión.';}
+    setTimeout(()=>{msgEl.textContent='';msgEl.className='msg';},3500);
+  }catch(e){hideSync();msgEl.className='msg err';msgEl.textContent='Error. Comprueba tu conexión.';}
   btn.disabled=false;
 }
 
 function renderHistorial(){
   const el=document.getElementById('historial-list');
-  const fd=document.getElementById('filter-dest').value;
+  const fd=document.getElementById('filter-hdest').value;
+  const fc=document.getElementById('filter-hcat').value;
+  const fm=document.getElementById('filter-hmes').value;
   const ft=document.getElementById('filter-htipo').value;
   let lista=[...historial];
   if(fd) lista=lista.filter(h=>h.destino===fd);
+  if(fc) lista=lista.filter(h=>h.categoria===fc);
+  if(fm) lista=lista.filter(h=>{
+    const parts=h.fecha.split('/');
+    return parts[1]===fm;
+  });
   if(ft) lista=lista.filter(h=>h.tipo===ft);
   if(!lista.length){el.innerHTML='<div class="empty">Sin movimientos</div>';return;}
   let html='',lastKey='';
@@ -548,6 +640,7 @@ function renderHistorial(){
       lastKey=key;
       let hd=`<span class="hist-day-lbl">${h.fecha}</span>`;
       if(h.destino) hd+=` <span class="badge dest">${h.destino}</span>`;
+      if(h.categoria) hd+=` <span class="badge cat">${nomCat(h.categoria)}</span>`;
       html+=`<div class="hist-day-hd">${hd}</div>`;
     }
     html+=`<div class="hist-row">
@@ -560,8 +653,8 @@ function renderHistorial(){
 }
 
 async function limpiarHistorial(){
-  if(!confirm('¿Borrar todo el historial? Esto no se puede deshacer.')) return;
-  showSync('Limpiando historial...');
+  if(!confirm('¿Borrar todo el historial?')) return;
+  showSync('Limpiando...');
   try{
     await api('historial?id=neq.VOID','DELETE');
     historial=[];hideSync();renderHistorial();
@@ -577,19 +670,19 @@ function csvDescargar(nombre,contenido){
 }
 
 function exportStockCSV(){
-  let rows='Producto;Cajas en stock;Estado;Alerta mínimo\n';
+  let rows='Producto;Categoría;Unidad;Stock;Estado;Alerta mínimo\n';
   [...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).forEach(p=>{
     const e=p.stock===0?'Sin stock':p.stock<=p.min?'Stock bajo':'OK';
-    rows+=`${p.nombre};${p.stock};${e};${p.min}\n`;
+    rows+=`${p.nombre};${nomCat(p.categoria)};${p.unidad||'uds'};${p.stock};${e};${p.min}\n`;
   });
-  csvDescargar('stock_almacen_'+hoy()+'.csv',rows);
+  csvDescargar('stock_grupodoze_'+hoy()+'.csv',rows);
 }
 
 function exportHistCSV(fd){
   let lista=[...historial];
   if(fd) lista=lista.filter(h=>h.destino===fd);
-  let rows='Fecha;Producto;Tipo;Cajas;Destino;Nota\n';
-  lista.forEach(h=>rows+=`${h.fecha};"${h.prod}";${h.tipo==='entrada'?'Entrada':'Salida'};${h.cant};"${h.destino||''}";"${h.nota||''}"\n`);
+  let rows='Fecha;Producto;Categoría;Tipo;Cantidad;Destino;Nota\n';
+  lista.forEach(h=>rows+=`${h.fecha};"${h.prod}";"${nomCat(h.categoria)}";${h.tipo==='entrada'?'Entrada':'Salida'};${h.cant};"${h.destino||''}";"${h.nota||''}"\n`);
   const suf=fd?'_'+fd.toLowerCase().replace(/ /g,'_'):'_completo';
   csvDescargar('historial'+suf+'_'+hoy()+'.csv',rows);
 }
