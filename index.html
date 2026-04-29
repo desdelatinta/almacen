@@ -881,36 +881,33 @@ async function guardarParte(){
 
   showSync('Guardando parte...');
   try{
-    // Eliminar fotos marcadas
+    const fechaRealizado=estado==='realizado'?fechaHoy:null;
+
+    // 1. Guardar/actualizar el parte PRIMERO
+    if(esNuevo){
+      await api('partes','POST',[{id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado}]);
+      partes.unshift({id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado});
+    }else{
+      const parteActual=partes.find(x=>x.id===editId);
+      const fechaRealizadoFinal=estado==='realizado'?(parteActual&&parteActual.fecha_realizado?parteActual.fecha_realizado:fechaHoy):null;
+      await api(`partes?id=eq.${editId}`,'PATCH',{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
+      if(parteActual) Object.assign(parteActual,{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
+    }
+
+    // 2. Eliminar fotos marcadas
     for(const f of fotosEliminar){
       await eliminarFotoStorage(f.nombre||f.id);
       await api(`partes_fotos?id=eq.${f.id}`,'DELETE');
       partesFotos=partesFotos.filter(x=>x.id!==f.id);
     }
 
-    // Subir fotos nuevas
-    const nuevasSubidas=[];
+    // 3. Subir fotos nuevas (el parte ya existe en BD)
     for(const file of fotosNuevas){
       if(!file) continue;
       const {nombre,url}=await subirFoto(file,parteId);
       const fid='pf'+Date.now()+Math.random().toString(36).slice(2,6);
       await api('partes_fotos','POST',[{id:fid,parte_id:parteId,url,nombre}]);
-      const fotoObj={id:fid,parte_id:parteId,url,nombre};
-      partesFotos.push(fotoObj);
-      nuevasSubidas.push(fotoObj);
-    }
-
-    const fechaRealizado=estado==='realizado'?fechaHoy:null;
-
-    if(esNuevo){
-      await api('partes','POST',[{id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado}]);
-      partes.unshift({id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado});
-    }else{
-      // Si cambia a realizado y no tenía fecha, poner hoy
-      const parteActual=partes.find(x=>x.id===editId);
-      const fechaRealizadoFinal=estado==='realizado'?(parteActual&&parteActual.fecha_realizado?parteActual.fecha_realizado:fechaHoy):null;
-      await api(`partes?id=eq.${editId}`,'PATCH',{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
-      if(parteActual) Object.assign(parteActual,{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
+      partesFotos.push({id:fid,parte_id:parteId,url,nombre});
     }
 
     hideSync();closeModal();renderPartes();
