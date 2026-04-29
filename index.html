@@ -26,8 +26,8 @@
 }
 body{background:var(--bg3);color:var(--text);min-height:100vh;padding-bottom:80px}
 .topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:100}
-.tabs{display:flex;gap:3px;background:var(--bg2);border-radius:var(--radius-sm);padding:3px;margin-top:10px}
-.tab{flex:1;padding:7px 2px;font-size:12px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--text2);text-align:center;font-weight:500}
+.tabs{display:flex;gap:3px;background:var(--bg2);border-radius:var(--radius-sm);padding:3px;margin-top:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{flex:1;padding:7px 2px;font-size:11px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--text2);text-align:center;font-weight:500;white-space:nowrap;min-width:0}
 .tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .sync-bar{background:var(--amber-bg);border-bottom:1px solid var(--amber-b);padding:8px 16px;font-size:12px;color:var(--amber);display:none;align-items:center;gap:8px}
 .sync-bar.show{display:flex}
@@ -49,10 +49,12 @@ button.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
 button.green{background:var(--green-bg);color:var(--green);border-color:var(--green-b);font-size:13px;padding:7px 12px}
 button.danger-btn{color:var(--red);border-color:var(--red-b);font-size:13px;padding:7px 12px}
 button.purple-btn{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-b);font-size:13px;padding:7px 12px}
+button.amber-btn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-b);font-size:13px;padding:7px 12px}
 button:disabled{opacity:.4;cursor:not-allowed}
 .search-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-input[type=text],input[type=number],select{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none}
-input[type=text]:focus,input[type=number]:focus,select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none}
+textarea{resize:vertical;min-height:80px;font-size:14px;line-height:1.5}
+input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,select:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
 .filter-sel{flex:1;min-width:100px;font-size:13px;padding:8px 10px}
 .search-inp{flex:2;min-width:130px}
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -67,7 +69,10 @@ tr:last-child td{border-bottom:none}
 .badge.out{background:var(--red-bg);color:var(--red)}
 .badge.dest{background:var(--blue-bg);color:var(--blue)}
 .badge.cat{background:var(--purple-bg);color:var(--purple)}
-.row-acts{display:flex;gap:6px}
+.badge.urgente{background:var(--red-bg);color:var(--red)}
+.badge.pendiente{background:var(--amber-bg);color:var(--amber)}
+.badge.realizado{background:var(--green-bg);color:var(--green)}
+.row-acts{display:flex;gap:6px;flex-wrap:wrap}
 .row-acts button{padding:5px 10px;font-size:12px}
 .empty{text-align:center;padding:24px;color:var(--text2);font-size:14px}
 .field{margin-bottom:14px}
@@ -103,11 +108,44 @@ tr:last-child td{border-bottom:none}
 .cat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg2)}
 .cat-name{font-size:14px;font-weight:500}
 .cat-count{font-size:12px;color:var(--text2)}
-.construccion{text-align:center;padding:40px 20px}
-.construccion-icon{font-size:48px;margin-bottom:16px}
-.construccion h2{font-size:20px;font-weight:700;margin-bottom:8px}
-.construccion p{font-size:14px;color:var(--text2);line-height:1.6}
-.construccion .pronto{display:inline-block;margin-top:16px;padding:8px 20px;background:var(--text);color:var(--bg);border-radius:20px;font-size:13px;font-weight:600}
+
+/* ===== PARTES DE TRABAJO ===== */
+.parte-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative}
+.parte-card.urgente{border-left:4px solid var(--red)}
+.parte-card.pendiente{border-left:4px solid var(--amber)}
+.parte-card.realizado{border-left:4px solid var(--green);opacity:.75}
+.parte-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.parte-titulo{font-size:15px;font-weight:600;flex:1}
+.parte-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.parte-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.parte-fotos{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.parte-foto{width:64px;height:64px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer}
+.parte-actions{display:flex;gap:6px;flex-wrap:wrap}
+.parte-actions button{font-size:12px;padding:5px 10px}
+.parte-fecha{font-size:11px;color:var(--text3)}
+
+/* Lightbox fotos */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:var(--radius);object-fit:contain}
+.lightbox-close{position:absolute;top:16px;right:16px;color:#fff;font-size:28px;cursor:pointer;line-height:1;background:none;border:none;padding:4px 8px}
+
+/* Upload fotos */
+.foto-upload-area{border:2px dashed var(--border2);border-radius:var(--radius-sm);padding:16px;text-align:center;cursor:pointer;font-size:13px;color:var(--text2);margin-bottom:8px;transition:border-color .2s}
+.foto-upload-area:hover{border-color:#3b82f6}
+.foto-previews{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.foto-preview-wrap{position:relative;display:inline-block}
+.foto-preview-wrap img{width:64px;height:64px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.foto-del-btn{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;line-height:1}
+
+/* Diario */
+.diario-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.diario-fecha{flex:1;min-width:140px}
+.diario-resumen{background:var(--bg2);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--text2)}
+.diario-resumen strong{color:var(--text)}
+.diario-parte{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;border-left:4px solid var(--green)}
+.diario-parte-titulo{font-size:14px;font-weight:600;margin-bottom:4px}
+.diario-parte-meta{font-size:12px;color:var(--text2);display:flex;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -125,7 +163,8 @@ tr:last-child td{border-bottom:none}
     <button class="tab" onclick="showPage('movimientos',this)">Movimientos</button>
     <button class="tab" onclick="showPage('historial',this)">Historial</button>
     <button class="tab" onclick="showPage('categorias',this)">Categorías</button>
-    <button class="tab" onclick="showPage('mantenimiento',this)">Obras 🚧</button>
+    <button class="tab" onclick="showPage('partes',this)">Partes</button>
+    <button class="tab" onclick="showPage('diario',this)">Diario</button>
   </div>
 </div>
 
@@ -281,15 +320,48 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- MANTENIMIENTO -->
-<div class="page" id="page-mantenimiento">
+<!-- PARTES DE TRABAJO -->
+<div class="page" id="page-partes">
   <div class="section">
-    <div class="construccion">
-      <div class="construccion-icon">🚧</div>
-      <h2>En construcción</h2>
-      <p>El módulo de partes de mantenimiento y pedidos está en desarrollo.<br><br>Pronto podrás gestionar todas las incidencias y solicitudes de los locales desde aquí.</p>
-      <span class="pronto">Próximamente</span>
+    <div class="section-header">
+      <span class="section-title">Partes de trabajo</span>
+      <button class="primary" onclick="openModal('addparte')">+ Nuevo parte</button>
     </div>
+    <div class="search-row">
+      <input class="search-inp" type="text" placeholder="Buscar parte..." oninput="renderPartes()" id="search-parte">
+      <select class="filter-sel" onchange="renderPartes()" id="filter-plocal">
+        <option value="">Todos los locales</option>
+        <option value="Doze">Doze</option>
+        <option value="Mesón">Mesón</option>
+        <option value="Campo de Tiro">Campo de Tiro</option>
+        <option value="Revolutum">Revolutum</option>
+        <option value="Corte y Cata">Corte y Cata</option>
+      </select>
+    </div>
+    <div class="search-row">
+      <select class="filter-sel" onchange="renderPartes()" id="filter-pestado">
+        <option value="">Todos los estados</option>
+        <option value="urgente">🔴 Urgente</option>
+        <option value="pendiente">🟡 Pendiente</option>
+        <option value="realizado">🟢 Realizado</option>
+      </select>
+    </div>
+    <div id="partes-list"></div>
+  </div>
+</div>
+
+<!-- DIARIO -->
+<div class="page" id="page-diario">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Diario de trabajo</span>
+      <button class="green" onclick="exportDiarioCSV()">Exportar .csv</button>
+    </div>
+    <div class="diario-header">
+      <input type="date" class="diario-fecha" id="diario-fecha" onchange="renderDiario()">
+    </div>
+    <div class="diario-resumen" id="diario-resumen"></div>
+    <div id="diario-list"></div>
   </div>
 </div>
 
@@ -303,12 +375,23 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- LIGHTBOX FOTOS -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
 const SUPABASE_URL='https://mkqthvfygmuypycwdaza.supabase.co';
 const SUPABASE_KEY='sb_publishable_xMFVUHJRWOWyA4MgnOnmRQ_IK6lQIFW';
+const STORAGE_BUCKET='partes-fotos';
 
-let productos=[],historial=[],categorias=[],editId=null,sortKey='nombre',sortDir=1,modalMode='';
+let productos=[],historial=[],categorias=[],partes=[],partesFotos=[];
+let editId=null,sortKey='nombre',sortDir=1,modalMode='';
+let fotosNuevas=[]; // archivos pendientes de subir al editar/crear parte
+let fotosEliminar=[]; // ids de fotos a eliminar al guardar
 
+// ===== API SUPABASE =====
 async function api(path,method='GET',body){
   const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'}};
   if(body) opts.body=JSON.stringify(body);
@@ -318,28 +401,47 @@ async function api(path,method='GET',body){
   return true;
 }
 
+// ===== STORAGE SUPABASE =====
+async function subirFoto(file,parteId){
+  const ext=file.name.split('.').pop();
+  const nombre=`${parteId}_${Date.now()}.${ext}`;
+  const r=await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${nombre}`,{
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':file.type,'x-upsert':'true'},
+    body:file
+  });
+  if(!r.ok) throw new Error('Error al subir foto');
+  return {nombre, url:`${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${nombre}`};
+}
+
+async function eliminarFotoStorage(nombre){
+  await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${nombre}`,{
+    method:'DELETE',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+  });
+}
+
+// ===== SYNC UI =====
 function showSync(msg){document.getElementById('sync-bar').classList.add('show');document.getElementById('sync-msg').textContent=msg||'Guardando...';}
 function hideSync(){document.getElementById('sync-bar').classList.remove('show');}
 
+// ===== CARGA INICIAL =====
 async function cargarDatos(){
   try{
-    let [prods,hist,cats]=await Promise.all([
+    let [prods,hist,cats,pts,ptsFotos]=await Promise.all([
       api('productos?order=nombre.asc&select=*'),
       api('historial?order=created_at.desc&select=*'),
-      api('categorias?order=nombre.asc&select=*').catch(()=>[])
+      api('categorias?order=nombre.asc&select=*').catch(()=>[]),
+      api('partes?order=fecha_creacion.desc&select=*').catch(()=>[]),
+      api('partes_fotos?select=*').catch(()=>[])
     ]);
 
-    // Si no existe tabla categorias la creamos via datos iniciales
     if(!Array.isArray(cats)||cats.length===0){
-      // Intentar crear categoria por defecto
       try{
         await api('categorias','POST',[{id:'cat0',nombre:'Licores y vinos'}]);
         cats=[{id:'cat0',nombre:'Licores y vinos'}];
-        // Asignar categoria a productos existentes
         if(prods.length>0){
-          for(const p of prods){
-            await api('productos?id=eq.'+p.id,'PATCH',{categoria:'cat0'});
-          }
+          for(const p of prods) await api('productos?id=eq.'+p.id,'PATCH',{categoria:'cat0'});
           prods=prods.map(p=>({...p,categoria:'cat0'}));
         }
       }catch(e){cats=[{id:'cat0',nombre:'Licores y vinos'}];}
@@ -348,22 +450,48 @@ async function cargarDatos(){
     categorias=cats;
     productos=prods;
     historial=hist;
+    partes=Array.isArray(pts)?pts:[];
+    partesFotos=Array.isArray(ptsFotos)?ptsFotos:[];
 
     document.getElementById('load-screen').classList.add('hidden');
     poblarFiltrosCat();
     renderProductos();
     renderCategorias();
+
+    // Inicializar fecha diario a hoy
+    const hoyVal=fechaHoyISO();
+    document.getElementById('diario-fecha').value=hoyVal;
+
   }catch(e){
     document.getElementById('load-screen').innerHTML='<div style="font-size:20px;font-weight:700">Error</div><div style="font-size:14px;color:#6b7280;margin-top:8px">No se pudo conectar.<br>Comprueba tu conexión.</div>';
   }
 }
 
+// ===== HELPERS FECHA =====
+function fechaHoyISO(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function fechaHoyDisplay(){
+  const d=new Date();
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+function isoADisplay(iso){
+  if(!iso) return '';
+  const [y,m,d]=iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+function hoy(){
+  const d=new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ===== NAVEGACIÓN =====
 function poblarFiltrosCat(){
   const opts=categorias.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
   const all='<option value="">Todas las categorías</option>';
   document.getElementById('filter-cat').innerHTML=all+opts;
   document.getElementById('filter-hcat').innerHTML=all+opts;
-  // select de movimientos
   const movCat=document.getElementById('mov-cat');
   if(movCat) movCat.innerHTML='<option value="">— Todas —</option>'+opts;
 }
@@ -381,8 +509,11 @@ function showPage(p,btn){
   if(p==='movimientos'){poblarFiltrosCat();renderMovCatSelect();}
   if(p==='historial') renderHistorial();
   if(p==='categorias') renderCategorias();
+  if(p==='partes') renderPartes();
+  if(p==='diario') renderDiario();
 }
 
+// ===== PRODUCTOS =====
 function estadoVal(p){return p.stock===0?0:p.stock<=p.min?1:2;}
 function badge(s,m){
   if(s===0) return '<span class="badge out">Sin stock</span>';
@@ -435,9 +566,12 @@ function updateMetrics(){
   document.getElementById('m-low').textContent=productos.filter(p=>p.stock===0||p.stock<=p.min).length;
 }
 
+// ===== MODAL GENERAL =====
 function openModal(mode,id){
   modalMode=mode;
   editId=id||null;
+  fotosNuevas=[];
+  fotosEliminar=[];
   const overlay=document.getElementById('modal-overlay');
   const title=document.getElementById('modal-title');
   const body=document.getElementById('modal-body');
@@ -461,17 +595,58 @@ function openModal(mode,id){
       <div class="field"><label>Alerta de stock bajo</label><input type="number" id="f-min" min="0" value="${p?p.min:3}"></div>
     `;
     actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarProducto()">Guardar</button>';
+
   } else if(mode==='addcat'||mode==='editcat'){
     title.textContent=mode==='editcat'?'Editar categoría':'Nueva categoría';
     const c=mode==='editcat'?categorias.find(x=>x.id===id):null;
     body.innerHTML=`<div class="field"><label>Nombre</label><input type="text" id="f-catnom" value="${c?c.nombre:''}"></div>`;
     actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarCategoria()">Guardar</button>';
+
+  } else if(mode==='addparte'||mode==='editparte'){
+    title.textContent=mode==='editparte'?'Editar parte':'Nuevo parte de trabajo';
+    const pt=mode==='editparte'?partes.find(x=>x.id===id):null;
+    const fotosActuales=mode==='editparte'?partesFotos.filter(f=>f.parte_id===id):[];
+    const locales=['Doze','Mesón','Campo de Tiro','Revolutum','Corte y Cata'];
+    const localOpts=locales.map(l=>`<option value="${l}" ${pt&&pt.local===l?'selected':''}>${l}</option>`).join('');
+    const estadoOpts=[
+      {v:'urgente',l:'🔴 Urgente'},
+      {v:'pendiente',l:'🟡 Pendiente'},
+      {v:'realizado',l:'🟢 Realizado'}
+    ].map(o=>`<option value="${o.v}" ${pt&&pt.estado===o.v?'selected':o.v==='pendiente'&&!pt?'selected':''}>${o.l}</option>`).join('');
+
+    const fotosHTML=fotosActuales.map(f=>`
+      <div class="foto-preview-wrap" id="fwrap-${f.id}">
+        <img src="${f.url}" onclick="openLightbox('${f.url}')">
+        <button class="foto-del-btn" onclick="marcarFotoEliminar('${f.id}','${f.nombre||''}')">✕</button>
+      </div>`).join('');
+
+    body.innerHTML=`
+      <div class="field"><label>Título</label><input type="text" id="f-ptitulo" value="${pt?pt.titulo:''}"></div>
+      <div class="field"><label>Local</label><select id="f-plocal">${localOpts}</select></div>
+      <div class="field"><label>Estado</label><select id="f-pestado">${estadoOpts}</select></div>
+      <div class="field"><label>Descripción / Ubicación dentro del local</label><textarea id="f-pdesc">${pt?pt.descripcion||'':''}</textarea></div>
+      <div class="field"><label>Notas adicionales</label><input type="text" id="f-pnotas" value="${pt?pt.notas||'':''}"></div>
+      <div class="field">
+        <label>Fotos</label>
+        <div class="foto-upload-area" onclick="document.getElementById('foto-input').click()">📷 Toca para añadir fotos</div>
+        <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="previsualizarFotos(this)">
+        <div class="foto-previews" id="foto-previews-nuevas"></div>
+        ${fotosActuales.length?`<div style="margin-top:8px;font-size:12px;color:var(--text2)">Fotos existentes:</div><div class="foto-previews" id="foto-previews-actuales">${fotosHTML}</div>`:''}
+      </div>
+    `;
+    actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarParte()">Guardar</button>';
   }
+
   overlay.classList.add('open');
 }
 
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  fotosNuevas=[];
+  fotosEliminar=[];
+}
 
+// ===== PRODUCTOS CRUD =====
 async function guardarProducto(){
   const nombre=document.getElementById('f-nombre').value.trim();
   if(!nombre) return;
@@ -552,6 +727,7 @@ function renderCategorias(){
   }).join('');
 }
 
+// ===== MOVIMIENTOS =====
 function renderMovCatSelect(){
   const sel=document.getElementById('mov-cat');
   sel.innerHTML='<option value="">— Todas —</option>'+categorias.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
@@ -597,7 +773,7 @@ async function registrarMovimiento(){
   if(tipo==='salida'&&cant>p.stock){msgEl.className='msg err';msgEl.textContent='Stock insuficiente.';return;}
   const nuevoStock=p.stock+(tipo==='entrada'?cant:-cant);
   const hid='h'+Date.now();
-  const fecha=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const fecha=fechaHoyDisplay();
   const catId=p.categoria||'';
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;
@@ -618,6 +794,7 @@ async function registrarMovimiento(){
   btn.disabled=false;
 }
 
+// ===== HISTORIAL =====
 function renderHistorial(){
   const el=document.getElementById('historial-list');
   const fd=document.getElementById('filter-hdest').value;
@@ -627,10 +804,7 @@ function renderHistorial(){
   let lista=[...historial];
   if(fd) lista=lista.filter(h=>h.destino===fd);
   if(fc) lista=lista.filter(h=>h.categoria===fc);
-  if(fm) lista=lista.filter(h=>{
-    const parts=h.fecha.split('/');
-    return parts[1]===fm;
-  });
+  if(fm) lista=lista.filter(h=>{const parts=h.fecha.split('/');return parts[1]===fm;});
   if(ft) lista=lista.filter(h=>h.tipo===ft);
   if(!lista.length){el.innerHTML='<div class="empty">Sin movimientos</div>';return;}
   let html='',lastKey='';
@@ -661,6 +835,236 @@ async function limpiarHistorial(){
   }catch(e){hideSync();alert('Error: '+e.message);}
 }
 
+// ===== PARTES DE TRABAJO =====
+
+function previsualizarFotos(input){
+  const container=document.getElementById('foto-previews-nuevas');
+  Array.from(input.files).forEach(file=>{
+    fotosNuevas.push(file);
+    const idx=fotosNuevas.length-1;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const wrap=document.createElement('div');
+      wrap.className='foto-preview-wrap';
+      wrap.id='fnueva-'+idx;
+      wrap.innerHTML=`<img src="${e.target.result}" onclick="openLightbox('${e.target.result}')">
+        <button class="foto-del-btn" onclick="quitarFotoNueva(${idx})">✕</button>`;
+      container.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+
+function quitarFotoNueva(idx){
+  fotosNuevas[idx]=null;
+  const el=document.getElementById('fnueva-'+idx);
+  if(el) el.remove();
+}
+
+function marcarFotoEliminar(fotoId,nombre){
+  fotosEliminar.push({id:fotoId,nombre});
+  const el=document.getElementById('fwrap-'+fotoId);
+  if(el) el.remove();
+}
+
+async function guardarParte(){
+  const titulo=document.getElementById('f-ptitulo').value.trim();
+  if(!titulo){alert('El título es obligatorio.');return;}
+  const local=document.getElementById('f-plocal').value;
+  const estado=document.getElementById('f-pestado').value;
+  const descripcion=document.getElementById('f-pdesc').value.trim();
+  const notas=document.getElementById('f-pnotas').value.trim();
+  const esNuevo=modalMode==='addparte';
+  const parteId=esNuevo?'pt'+Date.now():editId;
+  const fechaHoy=fechaHoyISO();
+
+  showSync('Guardando parte...');
+  try{
+    // Eliminar fotos marcadas
+    for(const f of fotosEliminar){
+      await eliminarFotoStorage(f.nombre||f.id);
+      await api(`partes_fotos?id=eq.${f.id}`,'DELETE');
+      partesFotos=partesFotos.filter(x=>x.id!==f.id);
+    }
+
+    // Subir fotos nuevas
+    const nuevasSubidas=[];
+    for(const file of fotosNuevas){
+      if(!file) continue;
+      const {nombre,url}=await subirFoto(file,parteId);
+      const fid='pf'+Date.now()+Math.random().toString(36).slice(2,6);
+      await api('partes_fotos','POST',[{id:fid,parte_id:parteId,url,nombre}]);
+      const fotoObj={id:fid,parte_id:parteId,url,nombre};
+      partesFotos.push(fotoObj);
+      nuevasSubidas.push(fotoObj);
+    }
+
+    const fechaRealizado=estado==='realizado'?fechaHoy:null;
+
+    if(esNuevo){
+      await api('partes','POST',[{id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado}]);
+      partes.unshift({id:parteId,titulo,local,estado,descripcion,notas,fecha_creacion:fechaHoy,fecha_realizado:fechaRealizado});
+    }else{
+      // Si cambia a realizado y no tenía fecha, poner hoy
+      const parteActual=partes.find(x=>x.id===editId);
+      const fechaRealizadoFinal=estado==='realizado'?(parteActual&&parteActual.fecha_realizado?parteActual.fecha_realizado:fechaHoy):null;
+      await api(`partes?id=eq.${editId}`,'PATCH',{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
+      if(parteActual) Object.assign(parteActual,{titulo,local,estado,descripcion,notas,fecha_realizado:fechaRealizadoFinal});
+    }
+
+    hideSync();closeModal();renderPartes();
+    if(document.getElementById('page-diario').classList.contains('active')) renderDiario();
+  }catch(e){hideSync();alert('Error al guardar: '+e.message);}
+}
+
+async function eliminarParte(id){
+  if(!confirm('¿Eliminar este parte de trabajo?')) return;
+  showSync('Eliminando...');
+  try{
+    // Eliminar fotos de storage
+    const fotos=partesFotos.filter(f=>f.parte_id===id);
+    for(const f of fotos) await eliminarFotoStorage(f.nombre||f.id);
+    // La FK con CASCADE elimina partes_fotos automáticamente
+    await api(`partes?id=eq.${id}`,'DELETE');
+    partes=partes.filter(p=>p.id!==id);
+    partesFotos=partesFotos.filter(f=>f.parte_id!==id);
+    hideSync();renderPartes();
+  }catch(e){hideSync();alert('Error: '+e.message);}
+}
+
+async function marcarRealizado(id){
+  const pt=partes.find(x=>x.id===id);
+  if(!pt) return;
+  const fecha=fechaHoyISO();
+  showSync('Actualizando...');
+  try{
+    await api(`partes?id=eq.${id}`,'PATCH',{estado:'realizado',fecha_realizado:fecha});
+    pt.estado='realizado';
+    pt.fecha_realizado=fecha;
+    hideSync();renderPartes();
+    if(document.getElementById('page-diario').classList.contains('active')) renderDiario();
+  }catch(e){hideSync();alert('Error: '+e.message);}
+}
+
+async function retirarParte(id){
+  if(!confirm('¿Retirar este parte? Se eliminará de la lista de partes activos.')) return;
+  // Retirar = eliminar el parte completamente
+  await eliminarParte(id);
+}
+
+function badgeParte(estado){
+  if(estado==='urgente') return '<span class="badge urgente">🔴 Urgente</span>';
+  if(estado==='realizado') return '<span class="badge realizado">🟢 Realizado</span>';
+  return '<span class="badge pendiente">🟡 Pendiente</span>';
+}
+
+function renderPartes(){
+  const el=document.getElementById('partes-list');
+  const q=(document.getElementById('search-parte').value||'').toLowerCase();
+  const fl=document.getElementById('filter-plocal').value;
+  const fe=document.getElementById('filter-pestado').value;
+
+  let lista=[...partes];
+  if(q) lista=lista.filter(p=>p.titulo.toLowerCase().includes(q)||(p.descripcion||'').toLowerCase().includes(q));
+  if(fl) lista=lista.filter(p=>p.local===fl);
+  if(fe) lista=lista.filter(p=>p.estado===fe);
+
+  // Ordenar: urgente primero, luego pendiente, luego realizado; dentro de cada grupo por fecha desc
+  const orden={urgente:0,pendiente:1,realizado:2};
+  lista.sort((a,b)=>(orden[a.estado]||1)-(orden[b.estado]||1)||0);
+
+  if(!lista.length){el.innerHTML='<div class="empty">No hay partes que coincidan</div>';return;}
+
+  el.innerHTML=lista.map(pt=>{
+    const fotos=partesFotos.filter(f=>f.parte_id===pt.id);
+    const fotosHTML=fotos.length?`<div class="parte-fotos">${fotos.map(f=>`<img class="parte-foto" src="${f.url}" onclick="openLightbox('${f.url}')" loading="lazy">`).join('')}</div>`:'';
+    const acciones=`
+      <div class="parte-actions">
+        <button onclick="openModal('editparte','${pt.id}')">✏️ Editar</button>
+        ${pt.estado!=='realizado'?`<button class="green" onclick="marcarRealizado('${pt.id}')">✅ Realizado</button>`:''}
+        ${pt.estado==='realizado'?`<button class="amber-btn" onclick="retirarParte('${pt.id}')">📤 Retirar</button>`:''}
+        <button class="danger-btn" onclick="eliminarParte('${pt.id}')">🗑 Borrar</button>
+      </div>`;
+    return `<div class="parte-card ${pt.estado}">
+      <div class="parte-header">
+        <div class="parte-titulo">${pt.titulo}</div>
+        ${badgeParte(pt.estado)}
+      </div>
+      <div class="parte-meta">
+        <span class="badge dest">${pt.local}</span>
+        <span class="parte-fecha">📅 Creado: ${isoADisplay(pt.fecha_creacion)}</span>
+        ${pt.fecha_realizado?`<span class="parte-fecha">✅ Realizado: ${isoADisplay(pt.fecha_realizado)}</span>`:''}
+      </div>
+      ${pt.descripcion?`<div class="parte-desc">📍 ${pt.descripcion}</div>`:''}
+      ${pt.notas?`<div class="parte-desc" style="font-style:italic">📝 ${pt.notas}</div>`:''}
+      ${fotosHTML}
+      ${acciones}
+    </div>`;
+  }).join('');
+}
+
+// ===== DIARIO =====
+function renderDiario(){
+  const fechaSel=document.getElementById('diario-fecha').value;
+  if(!fechaSel) return;
+  const lista=partes.filter(p=>p.estado==='realizado'&&p.fecha_realizado===fechaSel);
+  const resumen=document.getElementById('diario-resumen');
+  const diarioList=document.getElementById('diario-list');
+
+  resumen.innerHTML=`<strong>${lista.length} parte${lista.length!==1?'s':''} realizado${lista.length!==1?'s':''}</strong> el ${isoADisplay(fechaSel)}`;
+
+  if(!lista.length){
+    diarioList.innerHTML='<div class="empty">No hay partes realizados este día</div>';
+    return;
+  }
+
+  // Agrupar por local
+  const porLocal={};
+  lista.forEach(p=>{
+    if(!porLocal[p.local]) porLocal[p.local]=[];
+    porLocal[p.local].push(p);
+  });
+
+  let html='';
+  for(const [local,partesList] of Object.entries(porLocal)){
+    html+=`<div style="font-size:13px;font-weight:600;color:var(--text2);padding:8px 0 4px">${local}</div>`;
+    partesList.forEach(pt=>{
+      const fotos=partesFotos.filter(f=>f.parte_id===pt.id);
+      html+=`<div class="diario-parte">
+        <div class="diario-parte-titulo">${pt.titulo}</div>
+        <div class="diario-parte-meta">
+          <span>📍 ${pt.descripcion||'Sin descripción'}</span>
+          ${pt.notas?`<span>📝 ${pt.notas}</span>`:''}
+          ${fotos.length?`<span>📷 ${fotos.length} foto${fotos.length>1?'s':''}</span>`:''}
+        </div>
+        ${fotos.length?`<div class="parte-fotos" style="margin-top:8px">${fotos.map(f=>`<img class="parte-foto" src="${f.url}" onclick="openLightbox('${f.url}')" loading="lazy">`).join('')}</div>`:''}
+      </div>`;
+    });
+  }
+  diarioList.innerHTML=html;
+}
+
+function exportDiarioCSV(){
+  const fechaSel=document.getElementById('diario-fecha').value;
+  const lista=partes.filter(p=>p.estado==='realizado'&&p.fecha_realizado===fechaSel);
+  if(!lista.length){alert('No hay partes realizados ese día.');return;}
+  let rows='Fecha;Local;Título;Descripción;Notas\n';
+  lista.forEach(p=>rows+=`${isoADisplay(p.fecha_realizado)};"${p.local}";"${p.titulo}";"${p.descripcion||''}";"${p.notas||''}"\n`);
+  csvDescargar('diario_'+fechaSel.replace(/-/g,'')+'.csv',rows);
+}
+
+// ===== LIGHTBOX =====
+function openLightbox(url){
+  document.getElementById('lightbox-img').src=url;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src='';
+}
+
+// ===== EXPORTS CSV =====
 function csvDescargar(nombre,contenido){
   const blob=new Blob(['\uFEFF'+contenido],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
@@ -687,11 +1091,7 @@ function exportHistCSV(fd){
   csvDescargar('historial'+suf+'_'+hoy()+'.csv',rows);
 }
 
-function hoy(){
-  const d=new Date();
-  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-}
-
+// ===== EVENTOS =====
 document.getElementById('modal-overlay').addEventListener('click',function(e){
   if(e.target===this) closeModal();
 });
