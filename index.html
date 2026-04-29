@@ -109,6 +109,32 @@ tr:last-child td{border-bottom:none}
 .cat-name{font-size:14px;font-weight:500}
 .cat-count{font-size:12px;color:var(--text2)}
 
+
+/* ===== MENÚ HAMBURGUESA ===== */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:100}
+.hamburger-btn{background:none;border:none;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:5px;border-radius:var(--radius-sm)}
+.hamburger-btn span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .25s}
+.hamburger-btn:active{opacity:.6}
+
+.menu-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:150;transition:opacity .25s}
+.menu-overlay.open{display:block}
+
+.side-menu{position:fixed;top:0;left:0;height:100vh;width:260px;background:var(--bg);z-index:200;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:4px 0 24px rgba(0,0,0,.12)}
+.side-menu.open{transform:translateX(0)}
+
+.side-menu-header{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--border)}
+.side-menu-close{background:none;border:none;font-size:18px;color:var(--text2);cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm)}
+.side-menu-close:active{opacity:.6}
+
+.side-menu-items{padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;flex:1}
+
+.menu-item{width:100%;text-align:left;background:none;border:none;padding:12px 14px;font-size:15px;font-weight:500;color:var(--text2);border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .15s,color .15s}
+.menu-item:hover{background:var(--bg2);color:var(--text)}
+.menu-item.active{background:var(--bg2);color:var(--text);font-weight:600}
+.menu-icon{font-size:18px;width:24px;text-align:center}
+
+.menu-divider{height:1px;background:var(--border);margin:8px 6px}
+
 /* ===== PARTES DE TRABAJO ===== */
 .parte-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative}
 .parte-card.urgente{border-left:4px solid var(--red)}
@@ -157,16 +183,46 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <div class="topbar">
-  <img src="logo_grupo_doze.jpeg" alt="Grupo Doze" style="height:60px;width:100%;object-fit:contain;display:block;margin:0 auto 12px auto">
-  <div class="tabs">
-    <button class="tab active" onclick="showPage('productos',this)">Productos</button>
-    <button class="tab" onclick="showPage('movimientos',this)">Movimientos</button>
-    <button class="tab" onclick="showPage('historial',this)">Historial</button>
-    <button class="tab" onclick="showPage('categorias',this)">Categorías</button>
-    <button class="tab" onclick="showPage('partes',this)">Partes</button>
-    <button class="tab" onclick="showPage('diario',this)">Diario</button>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="hamburger-btn" onclick="toggleMenu()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+    <img src="logo_grupo_doze.jpeg" alt="Grupo Doze" style="height:38px;object-fit:contain">
+    <span id="page-title" style="font-size:16px;font-weight:600;color:var(--text)">Productos</span>
   </div>
 </div>
+
+<!-- OVERLAY FONDO -->
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
+<!-- MENÚ LATERAL -->
+<nav class="side-menu" id="side-menu">
+  <div class="side-menu-header">
+    <img src="logo_grupo_doze.jpeg" alt="Grupo Doze" style="height:44px;object-fit:contain">
+    <button class="side-menu-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="side-menu-items">
+    <button class="menu-item active" id="mi-productos" onclick="showPage('productos',this)">
+      <span class="menu-icon">📦</span> Productos
+    </button>
+    <button class="menu-item" id="mi-movimientos" onclick="showPage('movimientos',this)">
+      <span class="menu-icon">↕️</span> Movimientos
+    </button>
+    <button class="menu-item" id="mi-historial" onclick="showPage('historial',this)">
+      <span class="menu-icon">📋</span> Historial
+    </button>
+    <button class="menu-item" id="mi-categorias" onclick="showPage('categorias',this)">
+      <span class="menu-icon">🏷️</span> Categorías
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="mi-partes" onclick="showPage('partes',this)">
+      <span class="menu-icon">🔧</span> Partes de trabajo
+    </button>
+    <button class="menu-item" id="mi-diario" onclick="showPage('diario',this)">
+      <span class="menu-icon">📅</span> Diario
+    </button>
+  </div>
+</nav>
 
 <div class="sync-bar" id="sync-bar">
   <div class="spinner"></div>
@@ -524,16 +580,37 @@ function nomCat(id){
   return c?c.nombre:'';
 }
 
+const pageTitles={productos:'Productos',movimientos:'Movimientos',historial:'Historial',categorias:'Categorías',partes:'Partes de trabajo',diario:'Diario'};
+
 function showPage(p,btn){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  btn.classList.add('active');
+  document.getElementById('mi-'+p).classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[p]||p;
+  closeMenu();
   if(p==='movimientos'){poblarFiltrosCat();renderMovCatSelect();}
   if(p==='historial') renderHistorial();
   if(p==='categorias') renderCategorias();
   if(p==='partes') renderPartes();
   if(p==='diario') renderDiario();
+}
+
+function toggleMenu(){
+  const menu=document.getElementById('side-menu');
+  const overlay=document.getElementById('menu-overlay');
+  const isOpen=menu.classList.contains('open');
+  if(isOpen){closeMenu();}else{
+    menu.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+}
+
+function closeMenu(){
+  document.getElementById('side-menu').classList.remove('open');
+  document.getElementById('menu-overlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // ===== PRODUCTOS =====
