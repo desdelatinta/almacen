@@ -206,7 +206,10 @@ tr:last-child td{border-bottom:none}
       <span class="menu-icon">📦</span> Productos
     </button>
     <button class="menu-item" id="mi-movimientos" onclick="showPage('movimientos',this)">
-      <span class="menu-icon">↕️</span> Movimientos
+      <span class="menu-icon">🏭</span> Almacén
+    </button>
+    <button class="menu-item" id="mi-pedidos" onclick="showPage('pedidos',this)">
+      <span class="menu-icon">📦</span> Pedidos <span id="badge-pedidos" style="display:none;background:var(--red);color:#fff;border-radius:20px;font-size:11px;padding:1px 7px;margin-left:auto">0</span>
     </button>
     <button class="menu-item" id="mi-historial" onclick="showPage('historial',this)">
       <span class="menu-icon">📋</span> Historial
@@ -276,7 +279,7 @@ tr:last-child td{border-bottom:none}
 <!-- MOVIMIENTOS -->
 <div class="page" id="page-movimientos">
   <div class="section">
-    <div class="section-header"><span class="section-title">Registrar movimiento</span></div>
+    <div class="section-header"><span class="section-title">Entrada de mercancía</span></div>
     <div class="field"><label>Categoría</label>
       <select id="mov-cat" onchange="renderMovProdSelect()"></select>
     </div>
@@ -440,6 +443,32 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- PEDIDOS -->
+<div class="page" id="page-pedidos">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Pedidos</span>
+      <button class="primary" onclick="openModal('addpedido')">+ Nuevo pedido</button>
+    </div>
+    <div class="search-row">
+      <select class="filter-sel" onchange="renderPedidos()" id="filter-pedlocal">
+        <option value="">Todos los locales</option>
+        <option value="Doze">Doze</option>
+        <option value="Mesón">Mesón</option>
+        <option value="Campo de Tiro">Campo de Tiro</option>
+        <option value="Revolutum">Revolutum</option>
+        <option value="Corte y Cata">Corte y Cata</option>
+      </select>
+      <select class="filter-sel" onchange="renderPedidos()" id="filter-pedestado">
+        <option value="">Todos</option>
+        <option value="pendiente">🟡 Pendientes</option>
+        <option value="entregado">🟢 Entregados</option>
+      </select>
+    </div>
+    <div id="pedidos-list"></div>
+  </div>
+</div>
+
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
@@ -461,7 +490,7 @@ const SUPABASE_URL='https://mkqthvfygmuypycwdaza.supabase.co';
 const SUPABASE_KEY='sb_publishable_xMFVUHJRWOWyA4MgnOnmRQ_IK6lQIFW';
 const STORAGE_BUCKET='partes-fotos';
 
-let productos=[],historial=[],categorias=[],partes=[],partesFotos=[];
+let productos=[],historial=[],categorias=[],partes=[],partesFotos=[],pedidos=[],pedidosLineas=[];
 let editId=null,sortKey='nombre',sortDir=1,modalMode='';
 let fotosNuevas=[]; // archivos pendientes de subir al editar/crear parte
 let fotosEliminar=[]; // ids de fotos a eliminar al guardar
@@ -503,12 +532,14 @@ function hideSync(){document.getElementById('sync-bar').classList.remove('show')
 // ===== CARGA INICIAL =====
 async function cargarDatos(){
   try{
-    let [prods,hist,cats,pts,ptsFotos]=await Promise.all([
+    let [prods,hist,cats,pts,ptsFotos,peds,pedsLineas]=await Promise.all([
       api('productos?order=nombre.asc&select=*'),
       api('historial?order=created_at.desc&select=*'),
       api('categorias?order=nombre.asc&select=*').catch(()=>[]),
       api('partes?order=fecha_creacion.desc&select=*').catch(()=>[]),
-      api('partes_fotos?select=*').catch(()=>[])
+      api('partes_fotos?select=*').catch(()=>[]),
+      api('pedidos?order=fecha_creacion.desc&select=*').catch(()=>[]),
+      api('pedidos_lineas?select=*').catch(()=>[])
     ]);
 
     if(!Array.isArray(cats)||cats.length===0){
@@ -527,6 +558,8 @@ async function cargarDatos(){
     historial=hist;
     partes=Array.isArray(pts)?pts:[];
     partesFotos=Array.isArray(ptsFotos)?ptsFotos:[];
+    pedidos=Array.isArray(peds)?peds:[];
+    pedidosLineas=Array.isArray(pedsLineas)?pedsLineas:[];
 
     document.getElementById('load-screen').classList.add('hidden');
     poblarFiltrosCat();
@@ -539,6 +572,7 @@ async function cargarDatos(){
 
     // Auto-borrado silencioso: eliminar realizados con más de 7 días
     await autoborradoPartes();
+    actualizarBadgePedidos();
 
   }catch(e){
     document.getElementById('load-screen').innerHTML='<div style="font-size:20px;font-weight:700">Error</div><div style="font-size:14px;color:#6b7280;margin-top:8px">No se pudo conectar.<br>Comprueba tu conexión.</div>';
@@ -579,7 +613,7 @@ function nomCat(id){
   return c?c.nombre:'';
 }
 
-const pageTitles={productos:'Productos',movimientos:'Movimientos',historial:'Historial',categorias:'Categorías',partes:'Partes de trabajo',diario:'Diario'};
+const pageTitles={productos:'Productos',movimientos:'Almacén',pedidos:'Pedidos',historial:'Historial',categorias:'Categorías',partes:'Partes de trabajo',diario:'Diario'};
 
 function showPage(p,btn){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
@@ -593,6 +627,7 @@ function showPage(p,btn){
   if(p==='categorias') renderCategorias();
   if(p==='partes') renderPartes();
   if(p==='diario') renderDiario();
+  if(p==='pedidos') renderPedidos();
 }
 
 function toggleMenu(){
@@ -700,6 +735,29 @@ function openModal(mode,id){
     const c=mode==='editcat'?categorias.find(x=>x.id===id):null;
     body.innerHTML=`<div class="field"><label>Nombre</label><input type="text" id="f-catnom" value="${c?c.nombre:''}"></div>`;
     actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarCategoria()">Guardar</button>';
+
+  } else if(mode==='addpedido'||mode==='editpedido'){
+    title.textContent=mode==='editpedido'?'Editar pedido':'Nuevo pedido';
+    const ped=mode==='editpedido'?pedidos.find(x=>x.id===id):null;
+    const locales=['Doze','Mesón','Campo de Tiro','Revolutum','Corte y Cata'];
+    const localOpts=locales.map(l=>`<option value="${l}" ${ped&&ped.local===l?'selected':''}>${l}</option>`).join('');
+    // Cargar líneas existentes si editar
+    if(mode==='editpedido'){
+      lineasEditor=pedidosLineas.filter(l=>l.pedido_id===id).map(l=>({prod_id:l.producto_id,prod_nom:l.producto_nombre,qty:l.cantidad}));
+    }else{
+      lineasEditor=productos.length?[{prod_id:productos[0].id,prod_nom:productos[0].nombre,qty:1}]:[];
+    }
+    body.innerHTML=`
+      <div class="field"><label>Local</label><select id="f-pedlocal">${localOpts}</select></div>
+      <div class="field">
+        <label>Productos del pedido</label>
+        <div class="lineas-editor" id="lineas-editor-cont"></div>
+        <button class="add-linea-btn" onclick="añadirLineaEditor()">+ Añadir producto</button>
+      </div>
+      <div class="field"><label>Notas</label><input type="text" id="f-pednotas" value="${ped?ped.notas||'':''}"></div>
+    `;
+    actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarPedido()">Guardar</button>';
+    setTimeout(()=>renderLineasEditor(),50);
 
   } else if(mode==='addparte'||mode==='editparte'){
     title.textContent=mode==='editparte'?'Editar parte':'Nuevo parte de trabajo';
@@ -1150,6 +1208,165 @@ function exportDiarioCSV(){
   let rows='Fecha;Local;Título;Descripción;Notas\n';
   lista.forEach(p=>rows+=`${isoADisplay(p.fecha_realizado)};"${p.local}";"${p.titulo}";"${p.descripcion||''}";"${p.notas||''}"\n`);
   csvDescargar('diario_'+fechaSel.replace(/-/g,'')+'.csv',rows);
+}
+
+
+// ===== PEDIDOS =====
+
+let lineasEditor=[];
+
+function badgePedido(estado){
+  if(estado==='entregado') return '<span class="badge realizado">🟢 Entregado</span>';
+  return '<span class="badge pendiente">🟡 Pendiente</span>';
+}
+
+function actualizarBadgePedidos(){
+  const pendientes=pedidos.filter(p=>p.estado==='pendiente').length;
+  const badge=document.getElementById('badge-pedidos');
+  if(!badge) return;
+  if(pendientes>0){badge.style.display='inline';badge.textContent=pendientes;}
+  else{badge.style.display='none';}
+}
+
+function renderPedidos(){
+  const el=document.getElementById('pedidos-list');
+  if(!el) return;
+  const fl=document.getElementById('filter-pedlocal').value;
+  const fe=document.getElementById('filter-pedestado').value;
+  let lista=[...pedidos];
+  if(fl) lista=lista.filter(p=>p.local===fl);
+  if(fe) lista=lista.filter(p=>p.estado===fe);
+  lista.sort((a,b)=>a.estado==='pendiente'&&b.estado!=='pendiente'?-1:1);
+  if(!lista.length){el.innerHTML='<div class="empty">No hay pedidos</div>';return;}
+  el.innerHTML=lista.map(ped=>{
+    const lineas=pedidosLineas.filter(l=>l.pedido_id===ped.id);
+    const lineasHTML=lineas.map(l=>`
+      <div class="pedido-linea">
+        <span class="pedido-linea-nom">${l.producto_nombre}</span>
+        <span class="pedido-linea-qty">× ${l.cantidad}</span>
+      </div>`).join('');
+    return `<div class="pedido-card ${ped.estado}">
+      <div class="pedido-header">
+        <div class="pedido-local">${ped.local}</div>
+        ${badgePedido(ped.estado)}
+      </div>
+      <div class="pedido-fecha">📅 ${isoADisplay(ped.fecha_creacion)}${ped.fecha_entrega?' · ✅ Entregado: '+isoADisplay(ped.fecha_entrega):''}</div>
+      <div class="pedido-lineas">${lineasHTML}</div>
+      ${ped.notas?`<div class="pedido-notas">📝 ${ped.notas}</div>`:''}
+      <div class="pedido-actions">
+        ${ped.estado==='pendiente'?`
+          <button class="green" onclick="entregarPedido('${ped.id}')">✅ Marcar entregado</button>
+          <button onclick="openModal('editpedido','${ped.id}')">✏️ Editar</button>
+        `:''}
+        <button class="danger-btn" onclick="eliminarPedido('${ped.id}')">🗑 Borrar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderLineasEditor(){
+  const cont=document.getElementById('lineas-editor-cont');
+  if(!cont) return;
+  cont.innerHTML=lineasEditor.map((l,i)=>`
+    <div class="linea-row">
+      <select onchange="lineasEditor[${i}].prod_id=this.value;lineasEditor[${i}].prod_nom=this.options[this.selectedIndex].dataset.nom">
+        ${productos.map(p=>`<option value="${p.id}" data-nom="${p.nombre}" ${p.id===l.prod_id?'selected':''}>${p.nombre}</option>`).join('')}
+      </select>
+      <input type="number" min="1" value="${l.qty}" onchange="lineasEditor[${i}].qty=parseInt(this.value)||1">
+      <button class="danger-btn" onclick="quitarLineaEditor(${i})">✕</button>
+    </div>`).join('');
+}
+
+function añadirLineaEditor(){
+  if(!productos.length) return;
+  const p=productos[0];
+  lineasEditor.push({prod_id:p.id,prod_nom:p.nombre,qty:1});
+  renderLineasEditor();
+}
+
+function quitarLineaEditor(i){
+  lineasEditor.splice(i,1);
+  renderLineasEditor();
+}
+
+async function guardarPedido(){
+  const local=document.getElementById('f-pedlocal').value;
+  const notas=document.getElementById('f-pednotas').value.trim();
+  // Leer valores actuales del DOM
+  document.querySelectorAll('#lineas-editor-cont .linea-row').forEach((row,i)=>{
+    const sel=row.querySelector('select');
+    const inp=row.querySelector('input');
+    if(sel&&inp&&lineasEditor[i]){
+      lineasEditor[i].prod_id=sel.value;
+      lineasEditor[i].prod_nom=sel.options[sel.selectedIndex]?.dataset?.nom||sel.options[sel.selectedIndex]?.text||'';
+      lineasEditor[i].qty=parseInt(inp.value)||1;
+    }
+  });
+  if(!lineasEditor.length){alert('Añade al menos un producto.');return;}
+  const esNuevo=modalMode==='addpedido';
+  const pedId=esNuevo?'ped'+Date.now():editId;
+  const fechaHoy=fechaHoyISO();
+  showSync('Guardando pedido...');
+  try{
+    if(esNuevo){
+      await api('pedidos','POST',[{id:pedId,local,estado:'pendiente',notas,fecha_creacion:fechaHoy}]);
+      pedidos.unshift({id:pedId,local,estado:'pendiente',notas,fecha_creacion:fechaHoy,fecha_entrega:null});
+      for(const l of lineasEditor){
+        const lid='pl'+Date.now()+Math.random().toString(36).slice(2,5);
+        await api('pedidos_lineas','POST',[{id:lid,pedido_id:pedId,producto_id:l.prod_id,producto_nombre:l.prod_nom,cantidad:l.qty}]);
+        pedidosLineas.push({id:lid,pedido_id:pedId,producto_id:l.prod_id,producto_nombre:l.prod_nom,cantidad:l.qty});
+      }
+    }else{
+      await api(`pedidos?id=eq.${editId}`,'PATCH',{local,notas});
+      const ped=pedidos.find(p=>p.id===editId);
+      if(ped){ped.local=local;ped.notas=notas;}
+      // Borrar líneas anteriores y recrcar
+      await api(`pedidos_lineas?pedido_id=eq.${editId}`,'DELETE');
+      pedidosLineas=pedidosLineas.filter(l=>l.pedido_id!==editId);
+      for(const l of lineasEditor){
+        const lid='pl'+Date.now()+Math.random().toString(36).slice(2,5);
+        await api('pedidos_lineas','POST',[{id:lid,pedido_id:editId,producto_id:l.prod_id,producto_nombre:l.prod_nom,cantidad:l.qty}]);
+        pedidosLineas.push({id:lid,pedido_id:editId,producto_id:l.prod_id,producto_nombre:l.prod_nom,cantidad:l.qty});
+      }
+    }
+    hideSync();closeModal();renderPedidos();actualizarBadgePedidos();
+  }catch(e){hideSync();alert('Error: '+e.message);}
+}
+
+async function entregarPedido(id){
+  if(!confirm('¿Marcar como entregado? Se descontará el stock de cada producto.')) return;
+  const lineas=pedidosLineas.filter(l=>l.pedido_id===id);
+  const fechaHoy=fechaHoyISO();
+  showSync('Procesando entrega...');
+  try{
+    for(const l of lineas){
+      const prod=productos.find(p=>p.id===l.producto_id);
+      if(prod){
+        const nuevoStock=Math.max(0,prod.stock-l.cantidad);
+        await api(`productos?id=eq.${prod.id}`,'PATCH',{stock:nuevoStock});
+        const hid='h'+Date.now()+Math.random().toString(36).slice(2,5);
+        const ped=pedidos.find(p=>p.id===id);
+        await api('historial','POST',[{id:hid,prod:prod.nombre,tipo:'salida',cant:l.cantidad,destino:ped?ped.local:'',nota:'Pedido entregado',fecha:isoADisplay(fechaHoy),categoria:prod.categoria||''}]);
+        historial.unshift({id:hid,prod:prod.nombre,tipo:'salida',cant:l.cantidad,destino:ped?ped.local:'',nota:'Pedido entregado',fecha:isoADisplay(fechaHoy),categoria:prod.categoria||''});
+        prod.stock=nuevoStock;
+      }
+    }
+    await api(`pedidos?id=eq.${id}`,'PATCH',{estado:'entregado',fecha_entrega:fechaHoy});
+    const ped=pedidos.find(p=>p.id===id);
+    if(ped){ped.estado='entregado';ped.fecha_entrega=fechaHoy;}
+    hideSync();renderPedidos();renderProductos();actualizarBadgePedidos();
+  }catch(e){hideSync();alert('Error: '+e.message);}
+}
+
+async function eliminarPedido(id){
+  if(!confirm('¿Eliminar este pedido?')) return;
+  showSync('Eliminando...');
+  try{
+    await api(`pedidos?id=eq.${id}`,'DELETE');
+    pedidos=pedidos.filter(p=>p.id!==id);
+    pedidosLineas=pedidosLineas.filter(l=>l.pedido_id!==id);
+    hideSync();renderPedidos();actualizarBadgePedidos();
+  }catch(e){hideSync();alert('Error: '+e.message);}
 }
 
 // ===== BORRADO DIARIO =====
