@@ -1164,37 +1164,63 @@ function renderPartes(){
 function renderDiario(){
   const fechaSel=document.getElementById('diario-fecha').value;
   if(!fechaSel) return;
-  const lista=partes.filter(p=>p.estado==='realizado'&&p.fecha_realizado===fechaSel);
+  const listaPartes=partes.filter(p=>p.estado==='realizado'&&p.fecha_realizado===fechaSel);
+  const listaPedidos=pedidos.filter(p=>p.estado==='entregado'&&p.fecha_entrega===fechaSel);
   const resumen=document.getElementById('diario-resumen');
   const diarioList=document.getElementById('diario-list');
 
-  resumen.innerHTML=`<strong>${lista.length} parte${lista.length!==1?'s':''} realizado${lista.length!==1?'s':''}</strong> el ${isoADisplay(fechaSel)}`;
+  const totalPartes=listaPartes.length;
+  const totalPedidos=listaPedidos.length;
 
-  if(!lista.length){
-    diarioList.innerHTML='<div class="empty">No hay partes realizados este día</div>';
+  if(!totalPartes&&!totalPedidos){
+    resumen.innerHTML=`Sin actividad el ${isoADisplay(fechaSel)}`;
+    diarioList.innerHTML='<div class="empty">No hay partes ni pedidos este día</div>';
     return;
   }
 
+  resumen.innerHTML='<strong>'+(totalPartes||0)+'</strong> parte'+(totalPartes!==1?'s':'')+' realizado'+(totalPartes!==1?'s':'')+(totalPartes&&totalPedidos?' &middot; ':'')+(totalPedidos?'<strong>'+totalPedidos+'</strong> pedido'+(totalPedidos!==1?'s':'')+' entregado'+(totalPedidos!==1?'s':''):'')+(totalPartes||totalPedidos?' el '+isoADisplay(fechaSel):'');
+
   // Agrupar por local
   const porLocal={};
-  lista.forEach(p=>{
-    if(!porLocal[p.local]) porLocal[p.local]=[];
-    porLocal[p.local].push(p);
+  listaPartes.forEach(p=>{
+    if(!porLocal[p.local]) porLocal[p.local]={partes:[],pedidos:[]};
+    porLocal[p.local].partes.push(p);
+  });
+  listaPedidos.forEach(p=>{
+    if(!porLocal[p.local]) porLocal[p.local]={partes:[],pedidos:[]};
+    porLocal[p.local].pedidos.push(p);
   });
 
   let html='';
-  for(const [local,partesList] of Object.entries(porLocal)){
+  for(const [local,items] of Object.entries(porLocal)){
     html+=`<div style="font-size:13px;font-weight:600;color:var(--text2);padding:8px 0 4px">${local}</div>`;
-    partesList.forEach(pt=>{
+
+    // Partes
+    items.partes.forEach(pt=>{
       const fotos=partesFotos.filter(f=>f.parte_id===pt.id);
       html+=`<div class="diario-parte">
-        <div class="diario-parte-titulo">${pt.titulo}</div>
+        <div class="diario-parte-titulo">🔧 ${pt.titulo}</div>
         <div class="diario-parte-meta">
           <span>📍 ${pt.descripcion||'Sin descripción'}</span>
           ${pt.notas?`<span>📝 ${pt.notas}</span>`:''}
           ${fotos.length?`<span>📷 ${fotos.length} foto${fotos.length>1?'s':''}</span>`:''}
         </div>
         ${fotos.length?`<div class="parte-fotos" style="margin-top:8px">${fotos.map(f=>`<img class="parte-foto" src="${f.url}" onclick="openLightbox('${f.url}')" loading="lazy">`).join('')}</div>`:''}
+      </div>`;
+    });
+
+    // Pedidos
+    items.pedidos.forEach(ped=>{
+      const lineas=pedidosLineas.filter(l=>l.pedido_id===ped.id);
+      const lineasTexto=lineas.map(l=>`${l.producto_nombre} ×${l.cantidad}`).join(', ');
+      const numLineas=lineas.reduce((a,l)=>a+l.cantidad,0);
+      html+=`<div class="diario-parte" style="border-left-color:var(--blue)">
+        <div class="diario-parte-titulo">📦 Pedido entregado — ${local}</div>
+        <div class="diario-parte-meta">
+          <span>${lineasTexto||'Sin productos'}</span>
+          <span>📦 ${numLineas} unidad${numLineas!==1?'es':''} en total</span>
+          ${ped.notas?`<span>📝 ${ped.notas}</span>`:''}
+        </div>
       </div>`;
     });
   }
