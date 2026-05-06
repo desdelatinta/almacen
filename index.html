@@ -612,6 +612,14 @@ function nomCat(id){
   const c=categorias.find(x=>x.id===id);
   return c?c.nombre:'';
 }
+function badgeCat(id){
+  const c=categorias.find(x=>x.id===id);
+  if(!c) return '';
+  const col=c.color||'#6b21a8';
+  // Generar fondo claro a partir del color
+  const bg=col+'22';
+  return `<span class="badge" style="background:${bg};color:${col};border:1px solid ${col}44">${c.nombre}</span>`;
+}
 
 const pageTitles={productos:'Productos',movimientos:'Almacén',pedidos:'Pedidos',historial:'Historial',categorias:'Categorías',partes:'Partes de trabajo',diario:'Diario'};
 
@@ -682,7 +690,7 @@ function renderProductos(){
   tb.innerHTML=lista.map(p=>`<tr>
     <td>
       <div class="prod-name" title="${p.nombre}">${p.nombre}</div>
-      ${p.categoria?`<span class="badge cat" style="margin-top:3px;display:inline-block">${nomCat(p.categoria)}</span>`:''}
+      ${p.categoria?badgeCat(p.categoria):''}
     </td>
     <td style="font-weight:700">${p.stock}</td>
     <td>${badge(p.stock,p.min)}</td>
@@ -733,7 +741,28 @@ function openModal(mode,id){
   } else if(mode==='addcat'||mode==='editcat'){
     title.textContent=mode==='editcat'?'Editar categoría':'Nueva categoría';
     const c=mode==='editcat'?categorias.find(x=>x.id===id):null;
-    body.innerHTML=`<div class="field"><label>Nombre</label><input type="text" id="f-catnom" value="${c?c.nombre:''}"></div>`;
+    const colores=[
+      {v:'#6b21a8',l:'Morado'},
+      {v:'#1e40af',l:'Azul'},
+      {v:'#166534',l:'Verde'},
+      {v:'#92400e',l:'Naranja'},
+      {v:'#991b1b',l:'Rojo'},
+      {v:'#0e7490',l:'Cian'},
+      {v:'#854d0e',l:'Marrón'},
+      {v:'#374151',l:'Gris'},
+      {v:'#be185d',l:'Rosa'},
+    ];
+    const colorActual=c&&c.color?c.color:'#6b21a8';
+    const colorOpts=colores.map(co=>`<option value="${co.v}" ${colorActual===co.v?'selected':''}>${co.l}</option>`).join('');
+    body.innerHTML=`
+      <div class="field"><label>Nombre</label><input type="text" id="f-catnom" value="${c?c.nombre:''}"></div>
+      <div class="field">
+        <label>Color</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="f-catcolor" style="flex:1" onchange="document.getElementById('cat-color-preview').style.background=this.value">${colorOpts}</select>
+          <div id="cat-color-preview" style="width:32px;height:32px;border-radius:8px;background:${colorActual};border:1px solid var(--border);flex-shrink:0"></div>
+        </div>
+      </div>`;
     actions.innerHTML='<button onclick="closeModal()">Cancelar</button><button class="primary" onclick="guardarCategoria()">Guardar</button>';
 
   } else if(mode==='addpedido'||mode==='editpedido'){
@@ -829,16 +858,17 @@ async function guardarProducto(){
 async function guardarCategoria(){
   const nombre=document.getElementById('f-catnom').value.trim();
   if(!nombre) return;
+  const color=document.getElementById('f-catcolor').value||'#6b21a8';
   showSync('Guardando categoría...');
   try{
     if(editId){
-      await api(`categorias?id=eq.${editId}`,'PATCH',{nombre});
+      await api(`categorias?id=eq.${editId}`,'PATCH',{nombre,color});
       const c=categorias.find(x=>x.id===editId);
-      c.nombre=nombre;
+      c.nombre=nombre;c.color=color;
     }else{
       const id='cat'+Date.now();
-      await api('categorias','POST',[{id,nombre}]);
-      categorias.push({id,nombre});
+      await api('categorias','POST',[{id,nombre,color}]);
+      categorias.push({id,nombre,color});
     }
     hideSync();closeModal();renderCategorias();poblarFiltrosCat();
   }catch(e){hideSync();alert('Error: '+e.message);}
@@ -871,7 +901,7 @@ function renderCategorias(){
   if(!categorias.length){el.innerHTML='<div class="empty">Sin categorías todavía</div>';return;}
   el.innerHTML=categorias.map(c=>{
     const count=productos.filter(p=>p.categoria===c.id).length;
-    return `<div class="cat-item">
+    return `<div class="cat-item" style="border-left:4px solid ${c.color||'#6b21a8'}">
       <div>
         <div class="cat-name">${c.nombre}</div>
         <div class="cat-count">${count} producto${count!==1?'s':''}</div>
