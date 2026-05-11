@@ -244,7 +244,13 @@ tr:last-child td{border-bottom:none}
     <div class="section-header">
       <span class="section-title">Inventario</span>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="green" onclick="exportStockCSV()">Exportar .csv</button>
+        <div style="position:relative;display:inline-block">
+          <button class="green" onclick="toggleExportMenu()">Exportar .csv ▾</button>
+          <div id="export-menu" style="display:none;position:absolute;right:0;top:110%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,.1);min-width:170px;z-index:50;padding:4px">
+            <button class="export-menu-item" onclick="exportStockCSV('');toggleExportMenu()">Todo el stock</button>
+            <div id="export-cats-list"></div>
+          </div>
+        </div>
         <button class="primary" onclick="openModal('addprod')">+ Añadir</button>
       </div>
     </div>
@@ -1515,13 +1521,37 @@ function csvDescargar(nombre,contenido){
   URL.revokeObjectURL(url);
 }
 
-function exportStockCSV(){
+function exportStockCSV(catId){
+  let lista=[...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  if(catId) lista=lista.filter(p=>p.categoria===catId);
+  if(!lista.length){alert('No hay productos en esta categoría.');return;}
   let rows='Producto;Categoría;Unidad;Stock;Estado;Alerta mínimo\n';
-  [...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es')).forEach(p=>{
+  lista.forEach(p=>{
     const e=p.stock===0?'Sin stock':p.stock<=p.min?'Stock bajo':'OK';
     rows+=`${p.nombre};${nomCat(p.categoria)};${p.unidad||'uds'};${p.stock};${e};${p.min}\n`;
   });
-  csvDescargar('stock_grupodoze_'+hoy()+'.csv',rows);
+  const cat=catId?categorias.find(c=>c.id===catId):null;
+  const suf=cat?'_'+cat.nombre.toLowerCase().replace(/ /g,'_'):'_completo';
+  csvDescargar('stock_grupodoze'+suf+'_'+hoy()+'.csv',rows);
+}
+
+function toggleExportMenu(){
+  const menu=document.getElementById('export-menu');
+  const isOpen=menu.style.display==='block';
+  if(isOpen){menu.style.display='none';return;}
+  // Poblar categorías dinámicamente
+  const lista=document.getElementById('export-cats-list');
+  lista.innerHTML=categorias.map(c=>
+    `<button class="export-menu-item" onclick="exportStockCSV('${c.id}');toggleExportMenu()">${c.nombre}</button>`
+  ).join('');
+  menu.style.display='block';
+  // Cerrar al hacer click fuera
+  setTimeout(()=>document.addEventListener('click',cerrarExportMenu,{once:true}),10);
+}
+
+function cerrarExportMenu(e){
+  const menu=document.getElementById('export-menu');
+  if(menu&&!menu.contains(e.target)) menu.style.display='none';
 }
 
 function exportHistCSV(fd){
