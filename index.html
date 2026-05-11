@@ -1349,13 +1349,16 @@ async function guardarPedido(){
   const local=document.getElementById('f-pedlocal').value;
   const notas=document.getElementById('f-pednotas').value.trim();
   // Leer valores actuales del DOM
-  document.querySelectorAll('#lineas-editor-cont .linea-row').forEach((row,i)=>{
+  lineasEditor=[];
+  document.querySelectorAll('#lineas-editor-cont .linea-row').forEach((row)=>{
     const sel=row.querySelector('select');
     const inp=row.querySelector('input');
-    if(sel&&inp&&lineasEditor[i]){
-      lineasEditor[i].prod_id=sel.value;
-      lineasEditor[i].prod_nom=sel.options[sel.selectedIndex]?.dataset?.nom||sel.options[sel.selectedIndex]?.text||'';
-      lineasEditor[i].qty=parseInt(inp.value)||1;
+    if(sel&&inp){
+      const prod_id=sel.value;
+      const prod=productos.find(p=>p.id===prod_id);
+      const prod_nom=prod?prod.nombre:(sel.options[sel.selectedIndex]?.text||'');
+      const qty=parseInt(inp.value)||1;
+      lineasEditor.push({prod_id,prod_nom,qty});
     }
   });
   if(!lineasEditor.length){alert('Añade al menos un producto.');return;}
